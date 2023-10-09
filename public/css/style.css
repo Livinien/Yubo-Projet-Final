@@ -1,0 +1,100 @@
+
+/* THÈME DE COULEUR */
+:root {
+    --background-color-violet-fonce: #703EFF;
+    --background-color-violet-clair: #9D7BFF;
+    --background-color-violet-very-clair: #e0d6ff;
+    --violet-fonce: #703EFF;
+    --violet-clair: #9D7BFF;
+    --gray-light: #ddd;
+    --font-family: 'Poppins', sans-serif;
+    --box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.24);
+    --border-radius: 5px;
+    --color-white: #fff;
+    --color-dark: #000;
+}
+
+
+/* SELECTEUR UNIVERSEL */
+* {
+    margin: 0;
+    padding: 0;
+    /* Voir ChatGPT pour le box-sizing */
+    box-sizing: border-box;
+}
+
+
+/* CORPS DE LA PAGE */
+body {
+    min-height: 100vh;
+    font-family: var(--font-family);
+}
+
+.flex-fill {
+    flex: 1;
+}
+
+
+
+/* HEADER */
+
+header {
+    box-shadow: var(--box-shadow);
+}
+
+.header-search {
+    border-radius: 5px;
+    background-color: var(--background-color-violet-very-clair);
+    max-width: 400px;
+}
+
+.header-search input {
+    border-radius: 5px;
+    border: none;
+    outline: 0;
+    background-color: var(--background-color-violet-very-clair);
+    width: 350px;
+}
+
+.header-search input::placeholder {
+    color: var(--background-color-violet-fonce);
+}
+
+.navbar-purple {
+    background-color: var(--background-color-violet-fonce) !important;
+}
+
+.header-logo {
+    max-width: 150px;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    display: none;
+}
+
+
+
+
+/* BOUTONS INSCRIPTION / CONNEXION */
+
+.btn-primary {
+    background-color: var(--background-color-violet-clair) !important;
+    color: var(--color-white);
+    border: var(--background-color-violet-clair) !important;
+    box-shadow: var(--box-shadow);
+}
+
+.btn-primary:hover {
+    background-color: #a98bff;
+    opacity: 0.8;
+    transition: opacity 0.4s;
+}
+
+
+
+/* FOOTER */
+
+footer {
+    background-color: var(--background-color-violet-fonce);
+    color: var(--color-white);
+}

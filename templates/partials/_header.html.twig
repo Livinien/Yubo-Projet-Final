@@ -1,0 +1,47 @@
+
+
+{# HEADER #}
+
+  <header class="navbar navbar-expand-lg bg-body-tertiary fixed-top navbar-purple">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{ path('app_accueil') }}">
+          <img src="{{ asset("images/Yubo_Logo.png") }}" class="header-logo" alt="Logo de Yubo">
+      </a>
+
+          <div class="header-search d-flex justify-content-end flex-fill p-2">
+            <i class="fa-solid fa-magnifying-glass pt-1 p-1 mx-2"></i>
+            <input type="text" placeholder="Rechercher votre post . . .">
+          </div>
+
+          <div>
+              <button class="button-inscription btn btn-primary mx-3">Inscription</button>
+              <button class="button-connexion btn btn-primary">Connexion</button>
+          </div>
+    </div>
+
+
+
+      {# MENU HAMBURGER #}
+      <button class="navbar-toggler border border-light border-3 mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon  "></span>
+      </button>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <img src="{{ asset("images/Yubo_Logo.png") }}" class="header-logo" alt="Logo de Yubo">
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="link-inscription nav-link active" aria-current="page" href="#">Inscription</a>
+            </li>
+            <li class="nav-item">
+              <a class="link-connexion nav-link active" href="#">Connexion</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
