@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
 use App\Form\PostType;
+use DateTimeImmutable;
+use App\Entity\Comment;
+use App\Form\CommentType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,82 +17,100 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccueilController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
-    public function index(Request $request): Response
+    public function index(Request $request, EntityManagerInterface $em): Response
     {
 
-        // Création du formulaire pour la création de post
-        $formPost = $this->createForm(PostType::class);
+        // POST
         
-        // Connecter le formPost à la requête pour récupérer le résultat une fois que l'utilisateur aura soumit le post
-        $formPost->handleRequest($request);
+        // CRÉATION D'UN POST
+        $post = new Post();
+        
+        $formCreatePost = $this->createForm(PostType::class, $post);
+        $formCreatePost->handleRequest($request);
+        if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
+            
+            $post->setNbrOfResponse(0);
+            $post->setRating(0);
+            $post->setCreatedAt(new \DateTimeImmutable());
+            $em->persist($post);
+            $em->flush();
+            $this->addFlash('success', 'Votre poste est maintenant en ligne');
+        }
 
-        if ($formPost->isSubmitted() && $formPost->isValid()) {
+        // SOUMETTRE LE FORMULAIRE POUR LA MODIFICATION DE POST
+        $formEditPost = $this->createForm(PostType::class);
+        $formEditPost->handleRequest($request);
+        if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
+            
+        }
+
+        // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POST DANS LA BASE DE DONNÉES ET TRIÉ DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POST.
+        $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
+
+
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setCreatedAt(new \DateTimeImmutable());
+            $comment->setRating(0);
+            $content = $request->request->get('content');
+            $comment->setContent($content);
+            $comment->setPost($post);
+            $em->persist($post);
+            $em->persist($comment);
+            $em->flush();
+            $this->addFlash('success', 'Votre commentaire a bien été mis en ligne');
         }
 
         
-        $posts = [
-            
-            [   
-                'id' => '1',
-                'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos rerum accusamus sit modi fugiat dicta eos deleniti impedit, architecto reprehenderit tenetur? Harum totam illum voluptatem molestias nulla beatae, cum ex ?',
-                'image' => '',
-                'rating' => '20',
-                'author'=> [
-                    'name' => 'Flavien MAYET',
-                    'avatar' => 'https://randomuser.me/api/portraits/men/22.jpg'
-                ],
-                'nbrOfResponse' => 15
-            ],
-            [   
-                'id' => '2',
-                'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos rerum accusamus sit modi fugiat dicta eos deleniti impedit, architecto reprehenderit tenetur? Harum totam illum voluptatem molestias nulla beatae, cum ex ?',
-                'image' => '',
-                'rating' => '0',
-                'author'=> [
-                    'name' => 'Yin Yon',
-                    'avatar' => 'https://randomuser.me/api/portraits/women/17.jpg'
-                ],
-                'nbrOfResponse' => 15
-            ],
-            [   
-                'id' => '3',
-                'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos rerum accusamus sit modi fugiat dicta eos deleniti impedit, architecto reprehenderit tenetur? Harum totam illum voluptatem molestias nulla beatae, cum ex ?',
-                'image' => '',
-                'rating' => '-15',
-                'author'=> [
-                    'name' => 'Julie Doe',
-                    'avatar' => 'https://randomuser.me/api/portraits/women/3.jpg'
-                ],
-                'nbrOfResponse' => 15
-            ],
-        ];
-        
-        
         return $this->render('accueil/index.html.twig', [
-            'form' => $formPost->createView(),
+            'formCreatePost' => $formCreatePost->createView(),
+            'formEditPost' => $formEditPost->createView(),
+            'commentForm' => $commentForm,
             'posts' => $posts,
         ]);
     }
 
-
-
-
-    #[Route('/{id}', name: 'app_comment')]
-    public function comment(Request $request, string $id): Response
-    {
-        $posts = [
-            'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit...',
-            'image' => '',
-            'rating' => '20',
-            'author' => [
-                'name' => 'Flavien MAYET',
-                'avatar' => 'https://randomuser.me/api/portraits/men/22.jpg',
-            ],
-            'nbrOfResponse' => 15,
-        ];
     
+
+    // SUPPRIMER UN POST D'UN UTILISATEUR GRÂCE À SON ID
+    #[Route('/deletePost/{id}', name: 'app_delete_post')]
+    public function delete(Post $post, EntityManagerInterface $em): RedirectResponse
+    {
+
+        if ($post) {
+            $em->remove($post);
+            $em->flush();
+
+            $this->addFlash('success', 'Le post a été supprimé avec succès.');
+        } else {
+            $this->addFlash('error', 'Le post n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
+        }
+
+        return $this->redirectToRoute('app_accueil');
+    }
+
+
+
+    
+    
+    // COMMENTAIRE
+    
+    // AJOUTER UN COMMENTAIRE À UN POST
+    #[Route('addComment/{id}', name: 'app_comment')]
+    public function comment(Request $request, Post $post, EntityManagerInterface $em): Response
+    {
+        
+        
+
         return $this->render('accueil/comment.html.twig', [
-            'posts' => $posts,
+            'post' => $post,
+            
         ]);
     }
+
+    
+   
 }

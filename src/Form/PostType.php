@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,12 +15,13 @@ class PostType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-                'attr' => ['class' => 'form-control', 
-                'rows' => 6, 'cols' => 40, 
-                'placeholder' => 'Quoi de neuf,'],
+                'attr' => ['class' => 'form-control',
+                'rows' => 6, 'cols' => 40,
+                'placeholder' => 'Quoi de neuf,'
+                ],
             ])
             
-            ->add('image', FileType::class, [
+            ->add('image', FileType::class, ['label' => false], [
                 'attr' => ['class' => 'input-image'],
                 //'multiple' => true, // Permet d'uploader plusieurs fichiers
                 //'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
@@ -32,6 +34,8 @@ class PostType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+
+            'data_class' => Post::class
         ]);
     }
 }

@@ -74,6 +74,16 @@ header {
     display: none;
 }
 
+.flash {
+    padding: 20px;
+    text-align: center;
+    color: var(--color-white);
+}
+
+.flash-success {
+    background-color: var(--success);
+}
+
 
 
 
@@ -136,7 +146,7 @@ header {
 
 
 
-/* MODALE */
+/* MODALE - CREATE POST */
 
 .modal-header {
     color: var(--background-color-violet-fonce);
@@ -170,8 +180,6 @@ header {
     margin-left: -40px;
 }
 
-
-
 .post-avatar {
     height: 60px;
     width: 60px;
@@ -180,6 +188,27 @@ header {
 .name-user, .nbrOfResponse {
     color: var(--background-color-violet-fonce);
     cursor: pointer;
+}
+
+.bullets-points {
+    color: var(--background-color-violet-fonce);
+    font-size: 30px;
+}
+
+.text-purple {
+    color: var(--background-color-violet-fonce);
+}
+
+.text-purple:hover {
+    color: var(--background-color-violet-clair);
+}
+
+.dropdown-item:active {
+    background-color: var(--background-color-violet-fonce);
+}
+
+.dropdown-toggle::after {
+    content: none;
 }
 
 .icon {
@@ -209,7 +238,18 @@ header {
 }
 
 
+/* MODALE POST */
 
+.comment {
+    background-color: var(--color-white);
+    padding-top: 5px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.color-purple {
+    color: var(--background-color-violet-fonce) !important;
+}
 
 /* FOOTER */
 
