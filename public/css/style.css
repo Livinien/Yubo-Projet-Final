@@ -14,6 +14,12 @@
     --border-radius: 5px;
     --color-white: #fff;
     --color-dark: #000;
+    --font-size-small: 14px;
+    --font-size-regular: 16px;
+    --font-weight-regular: 400;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+
 }
 
 
@@ -85,6 +91,28 @@ header {
 }
 
 
+/* USER CONNECTED */
+
+.container-fluid .header-picture-user {
+    border-radius: 50%;
+    width: 60px;
+    display: block;
+}
+
+.user {
+    margin-left: -90px;
+}
+
+.btn-user {
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+.scrolling-menu {
+    margin-top: 70px;
+    margin-right: -20px;
+}
+
 
 
 /* BUTTONS INSCRIPTION / CONNEXION */
@@ -112,7 +140,7 @@ header {
 .container-post {
     background-color: var(--color-white);
     box-shadow: var(--box-shadow);
-    margin-top: 150px;
+    margin-top: 145px;
     border-radius: 20px;
     padding: 20px;
     width: 480px;
@@ -143,6 +171,76 @@ header {
     color: var(--background-color-violet-fonce);
 }
 
+
+/* FORMULAIRE INSCRIPTION - LABEL */
+
+.inscription {
+    margin-top: 110px;
+}
+
+.form-control, label {
+    width: 700px;
+    color: var(--background-color-violet-fonce);
+    margin-top: 3px;
+}
+
+.button-signup {
+    width: 20%;
+    background-color: var(--background-color-violet-fonce);
+}
+
+.text-purple-inscription {
+    color: var(--background-color-violet-fonce);
+}
+
+
+
+.block {
+    padding: 20px;
+    border-radius: var(--border-radius);
+    background-color: white;
+    box-shadow: var(--box-shadow);
+}
+
+/* INSCRIPTION ET CONNEXION */
+
+.form-row {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    margin-bottom: 5px;
+    font-weight: var(--font-weight-semi-bold);
+    color: var(--background-color-violet-fonce);
+}
+
+.form-row input,
+textarea {
+    font-family: var(--font-family);
+    border: 2px solid var(--background-color-violet-fonce);
+    border-radius: var(--border-radius);
+    border-color: var(--background-color-violet-fonce);
+    padding: 10px 15px;
+    background-color: var(--background-color-violet-very-clair);
+}
+
+.form-row textarea {
+    min-height: 150px;
+}
+
+.form-errors {
+    color: var(--danger);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-semi-bold);
+    list-style: none;
+    margin-left: -30px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
 
 
 

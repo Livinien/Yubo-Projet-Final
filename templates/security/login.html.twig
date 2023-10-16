@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+
+{% block body %}
+    <div class="inscription mb-20">
+        <h2 class="mb-20 mt-5 title-inscription text-purple-inscription d-flex justify-content-center mb-3">Connexion</h2>
+
+        <form action="{{ path('login') }}" method="POST">
+            <div class="form-row">
+                <label for="email">Email</label>
+                <input type="text" id="email" autofocus name="_username" value="{{ username }}">
+            </div>
+            
+            <div class="form-row">
+                <label for="password">Mot de Passe</label>
+                <input type="password" id="password" name="_password">
+            </div>
+
+            <div class="form-row">
+                <label for="remember_me">
+                    <input type="checkbox" id="remember_me" name="_remember_me"><span class="mx-2">Se souvenir de moi</span> 
+                </label>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            {% if error %}
+                <ul class="form-errors">
+                    <li>{{ error.messageKey | trans(error.messageData, 'security') }}</li>
+                </ul>
+            {% endif %}
+            
+            
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-primary button-signup mb-4 mt-4">Se Connecter</button>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3 mb-4">
+                <small>Pas encore inscrit ?
+                    <a href="{{ path('signup') }}" class="text-decoration-none text-purple">Créer un compte</a>
+                </small>
+            </div>
+        </form>
+        
+    </div>
+{% endblock %}
+
+
+

@@ -13,10 +13,34 @@
         <input type="text" placeholder="Rechercher votre post . . .">
       </div>
 
-      <div>
-          <button class="button-inscription btn btn-primary mx-3">Inscription</button>
-          <button class="button-connexion btn btn-primary">Connexion</button>
-      </div>
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+       
+        <div class="btn-group user">
+         <a href=""><img src="{{ app.user.picture }}" class="header-picture-user mx-2" alt="Photo de l'utilisateur"></a>
+          
+          <div class="dropdown">
+            <button class="btn btn-primary btn-user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a href="" class="text-decoration-none text-light">{{ app.user.firstname }}</a>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="" class="text-decoration-none text-purple mx-2">Profil</a></li>
+              <li><a href="{{ path('logout') }}" class="text-decoration-none text-danger mx-2">Déconnexion</a></li>
+            </ul>
+          </div>
+
+          <div class="link-user mt-3">
+            
+          </div>
+
+        </div>
+        
+      {% else %}
+        <div>
+          <a href="{{ path('signup') }}" class="button-inscription btn btn-primary mx-3">Inscription</a>
+          <a href="{{ path('login') }}" class="button-connexion btn btn-primary">Connexion</a>
+        </div>
+      {% endif %}
+      
     </div>
 
 
@@ -33,10 +57,10 @@
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="link-inscription nav-link active" aria-current="page" href="#">Inscription</a>
+              <a href="{{ path('signup') }}" class="link-inscription nav-link active" aria-current="page" href="#">Inscription</a>
             </li>
             <li class="nav-item">
-              <a class="link-connexion nav-link active" href="#">Connexion</a>
+              <a href="{{ path('login') }}" class="link-connexion nav-link active" href="#">Connexion</a>
             </li>
           </ul>
         </div>

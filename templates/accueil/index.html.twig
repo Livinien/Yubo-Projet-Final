@@ -8,9 +8,8 @@
     {# CRÉER UN POST #}
 
     <div class="container d-flex flex-column justify-content-center align-items-center">
-    
         <div class="container-post d-flex justify-content-center">
-            <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" class="d-flex align-item-center" alt="Photo de l'utilisateur"></a>
+            <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" alt="Photo de l'utilisateur"></a>
             <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
                 <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span>Rechercher votre post . . .</span></button>
             </div>
@@ -46,11 +45,15 @@
         <ul class="mt-3 w-50">
             {% for post in posts %}
                 <div class="post mt-5">
+                
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex">
                             {# <img src="{{ post.author.avatar }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"> #}
                             {# <p class="name-user fw-bold m-3">{{ post.author.name }}</p> #}
                         </div>
+
+
 
                         <div class="btn-group">
                             <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,6 +65,8 @@
                             </ul>
                         </div>
                     </div>
+
+                    
                     
                     <!-- MODALE EDIT POST -->
                     
@@ -107,7 +112,10 @@
                         </div>
                     </div>
                     
+                    {% endif %}
 
+
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         
                     <a href="{{ path('app_comment', { id: post.id }) }}" class="d-flex flex-column text-decoration-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{post.id}}">
                         <div class="flex-fill d-flex flex-column mt-3">
@@ -131,8 +139,32 @@
                             </div>
                         </div>
                     </a>
-                </div>
+                
 
+                {% else %}
+
+                <div class="flex-fill d-flex flex-column mt-3">
+                        <div>
+                            <p class="content">{{ post.content }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="rating d-flex">
+                            <i class="fa-regular fa-thumbs-up icon mx-2 {{ post.rating > 0 ? 'rating-up' : '' }}"></i>
+                            <p {% if post.rating > 0 %} class="rating-up ms-1" 
+                                {% elseif post.rating < 0 %} class="rating-down" 
+                                {% endif %}>
+                                {{ post.rating }}
+                            </p>
+                            <i class="fa-regular fa-thumbs-down icon ms-4 mx-2 {{ post.rating < 0 ? 'rating-down' : '' }}"></i>
+                        </div>
+                        <div class="nbrOfResponse d-flex align-item-center ms-4">
+                            <i class="fa-regular fa-comment icon"></i>
+                            <p class="ms-1">{{ post.nbrOfResponse }}</p>
+                        </div>
+                    </div>
+                {% endif %}  
+            </div>
                                 
                 {# <a href="{{ path('app_comment', { id: post.id }) }}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 
@@ -183,14 +215,15 @@
                     <div class="comment ">
                         <h3 class="color-purple text-center mt-2">Commentaire</h3>
                         <div class="comment-form p-3">
-                            {{ form_start(commentForm) }}
-                            {{ form_rest(commentForm) }}
+                            {# {{ form_start(commentForm) }} #}
+                            {# {{ form_rest(commentForm) }} #}
                             <button type="submit" class="btn btn-primary d-flex justify-content-center button-footer mt-5">Envoyer</button>
-                            {{ form_end(commentForm) }}
+                            {# {{ form_end(commentForm) }} #}
                         </div> 
                     </div>
                 </div>
             </div>
+
             
             {% endfor %}
         </ul>

@@ -17,12 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AccueilController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
+    #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
 
         // POST
         
         // CRÉATION D'UN POST
+        $user = $this->getUser();
         $post = new Post();
         
         $formCreatePost = $this->createForm(PostType::class, $post);
@@ -31,6 +33,7 @@ class AccueilController extends AbstractController
             
             $post->setNbrOfResponse(0);
             $post->setRating(0);
+            $post->setAuthor($user);
             $post->setCreatedAt(new \DateTimeImmutable());
             $em->persist($post);
             $em->flush();
@@ -47,20 +50,21 @@ class AccueilController extends AbstractController
         // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POST DANS LA BASE DE DONNÉES ET TRIÉ DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POST.
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
 
-
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            dump($request);
             $comment->setCreatedAt(new \DateTimeImmutable());
             $comment->setRating(0);
-            $content = $request->request->get('content');
-            $comment->setContent($content);
+            $comment->setAuthor($user);
+            // $content = $request->request->get('content');
+            // $comment->setContent($content);
             $comment->setPost($post);
             $em->persist($post);
-            $em->persist($comment);
-            $em->flush();
+            // $em->persist($comment);
+            // $em->flush();
             $this->addFlash('success', 'Votre commentaire a bien été mis en ligne');
         }
 
@@ -77,6 +81,7 @@ class AccueilController extends AbstractController
 
     // SUPPRIMER UN POST D'UN UTILISATEUR GRÂCE À SON ID
     #[Route('/deletePost/{id}', name: 'app_delete_post')]
+    #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function delete(Post $post, EntityManagerInterface $em): RedirectResponse
     {
 
@@ -100,6 +105,7 @@ class AccueilController extends AbstractController
     
     // AJOUTER UN COMMENTAIRE À UN POST
     #[Route('addComment/{id}', name: 'app_comment')]
+    #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function comment(Request $request, Post $post, EntityManagerInterface $em): Response
     {
         

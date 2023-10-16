@@ -31,4 +31,16 @@
     .navbar-toggler-icon {
         color: var(--color-white);
     }
+
+    
+
+    /* USER CONNECTED */
+
+    .container-fluid .header-picture-user {
+       display: none;
+    }
+
+    .btn-user, .link-user a {
+        display: none;
+    }
 }
