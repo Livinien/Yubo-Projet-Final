@@ -1,6 +1,21 @@
 
 /* NAVBAR */
 
+
+
+@media screen and (max-width: 1200px) {
+
+    .post-make .message-input-visitor {
+        margin-right: -91px;
+    }
+
+    .post-make span {
+        margin-right: -30px;
+    }
+}
+
+
+
 @media screen and (max-width: 991px) {
 
     .navbar {
@@ -32,6 +47,11 @@
         color: var(--color-white);
     }
 
+    .post-make .message-input-visitor {
+        margin-left: -90px;
+        font-size: 12px;
+    }
+
     
 
     /* USER CONNECTED */
@@ -54,6 +74,44 @@
         display: block;
         color: var(--background-color-violet-fonce);
     }
+
+    .post-make span {
+        margin-right: -122px;
+        font-size: 14px;
+    }
 }
+
+
+
+
+@media screen and (max-width: 768px) {
+
+    .post-make .message-input-visitor {
+        display: none;
+    }
+
+    .container-post .visitor-image {
+        display: none;
+    }
+
+    .post-make .modal-post {
+        margin-right: 5px;
+    }
+
+    .post-make span {
+        display: none;
+    }
+
+    .image-user {
+        display: none;
+    }
+
+    .modal-post .glass {
+        display: block;
+    }
+    
+}
+
+
 
 

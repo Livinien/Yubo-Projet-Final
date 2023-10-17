@@ -12,9 +12,9 @@
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
         <div class="container-post d-flex justify-content-center">
-            <a href=""><img src="{{ app.user.picture }}" class="rounded-circle" alt="Photo de l'utilisateur"></a>
+            <a href="" class="mx-2"><img src="{{ app.user.picture }}" class="image-user rounded-circle" alt="Photo de l'utilisateur"></a>
             <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
-                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span>Quoi de neuf, {{app.user.firstname}} ?</span></button>
+                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i><span class="message-input-user">Quoi de neuf, {{ app.user.firstname }} ?</span></button>
             </div>
 
 
@@ -47,7 +47,8 @@
             <div class="container-post d-flex justify-content-center">
                 <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image" alt="Photo de l'utilisateur"></a>
                 <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
-                    <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span></button>
+                    
+                    <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i><span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span></button>
                 </div>
             </div>
         </a>

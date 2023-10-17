@@ -54,7 +54,7 @@ header {
 .header-search {
     border-radius: 5px;
     background-color: var(--background-color-violet-very-clair);
-    max-width: 400px;
+    max-width: 35%;
 }
 
 .header-search input {
@@ -152,7 +152,7 @@ header {
     margin-top: 145px;
     border-radius: 20px;
     padding: 20px;
-    width: 480px;
+    width: 51%;
     height: 100px;
 }
 
@@ -166,7 +166,7 @@ header {
 /* VISITOR IMAGE */
 
 .container-post .visitor-image {
-    width: 150%;
+    width: 120%;
     margin-left: -15px;
 }
 
@@ -190,13 +190,17 @@ header {
     border: var(--background-color-violet-fonce);
     outline: none;
     background-color: var(--background-color-violet-very-clair);
-    width: 350px;
+    width: 95%;
     cursor: pointer;
 }
 
 /* POSITIONNEMENT DU SPAN EN FONCTION DU VISITEUR */
 .post-make .message-input-visitor {
     margin-right: -51px;
+}
+
+.modal-post .glass {
+    display: none;
 }
 
 
