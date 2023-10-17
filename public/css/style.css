@@ -33,6 +33,7 @@
 
 
 /* BODY */
+
 body {
     min-height: 100vh;
     font-family: var(--font-family);
@@ -91,7 +92,7 @@ header {
 }
 
 
-/* USER CONNECTED */
+/* UTILISATEUR CONNECTÉ */
 
 .container-fluid .header-picture-user {
     border-radius: 50%;
@@ -134,6 +135,14 @@ header {
     background-color: var(--background-color-violet-clair) !important;
 }
 
+.avatar-sidebar {
+    display: none;
+}
+
+.name-sidebar {
+    display: none;
+}
+
 
 /* FORMULAIRE */
 
@@ -149,7 +158,26 @@ header {
 
 .container-post img {
     height: 60px;
+    width: 60px;
+}
+
+
+
+/* VISITOR IMAGE */
+
+.container-post .visitor-image {
+    width: 150%;
+    margin-left: -15px;
+}
+
+.visitor-image-post {
+    height: 60px;
     width: 100px;
+    margin-left: -16px;
+}
+
+.name-visitor {
+    margin-left: -16px;
 }
 
 .post-make {
@@ -166,8 +194,15 @@ header {
     cursor: pointer;
 }
 
+/* POSITIONNEMENT DU SPAN EN FONCTION DU VISITEUR */
+.post-make .message-input-visitor {
+    margin-right: -51px;
+}
+
+
+/* POSITIONNEMENT DU SPAN EN FONCTION DE L'UTILISATEUR CONNECTÉ */
 .post-make span {
-    margin-left: -110px;
+    margin-left: -138px;
     color: var(--background-color-violet-fonce);
 }
 
@@ -193,14 +228,14 @@ header {
     color: var(--background-color-violet-fonce);
 }
 
-
-
 .block {
     padding: 20px;
     border-radius: var(--border-radius);
     background-color: white;
     box-shadow: var(--box-shadow);
 }
+
+
 
 /* INSCRIPTION ET CONNEXION */
 
@@ -244,7 +279,8 @@ textarea {
 
 
 
-/* MODALE - CREATE POST */
+
+/* MODALE - CRÉATION DE POST */
 
 .modal-header {
     color: var(--background-color-violet-fonce);
@@ -336,6 +372,30 @@ textarea {
 }
 
 
+
+/* MODALE VISITOR */
+
+.message-visitor {
+    color: var(--background-color-violet-fonce);
+}
+
+.image-gif-visitor {
+    width: 100%;
+}
+
+.button-inscription-visitor {
+    color: var(--background-color-violet-fonce);
+    border: 2px solid var(--background-color-violet-fonce);
+    border-radius: 5px;
+    padding: 3.5px;
+}
+
+.button-connexion-visitor {
+    background-color: var(--background-color-violet-fonce);
+}
+
+
+
 /* MODALE POST */
 
 .comment {
@@ -348,6 +408,87 @@ textarea {
 .color-purple {
     color: var(--background-color-violet-fonce) !important;
 }
+
+
+
+/* LOADER CONNEXION */
+
+.anim-loader {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.point1 {
+    margin: 0 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+    animation: loader 0.3s alternate infinite;
+}
+
+.point1:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.point1:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.point1:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+
+@keyframes loader {
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+.loaderFinal {
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-color-violet-fonce);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-loader {
+    width: 130px;
+    margin-bottom: 10px;
+}
+
+.anim-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Pour centrer horizontalement */
+    justify-content: center; /* Pour centrer verticalement */
+    height: 100%; /* Pour occuper toute la hauteur de loaderFinal */
+}
+
+.loaderFinal.hidden {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+
 
 /* FOOTER */
 

@@ -8,10 +8,13 @@
     {# CRÉER UN POST #}
 
     <div class="container d-flex flex-column justify-content-center align-items-center">
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
         <div class="container-post d-flex justify-content-center">
-            <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" alt="Photo de l'utilisateur"></a>
+            <a href=""><img src="{{ app.user.picture }}" class="rounded-circle" alt="Photo de l'utilisateur"></a>
             <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
-                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span>Rechercher votre post . . .</span></button>
+                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span>Quoi de neuf, {{app.user.firstname}} ?</span></button>
             </div>
 
 
@@ -20,7 +23,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header mt-2">
-                            <a href="" class="d-flex text-decoration-none"><img src="{{ asset("images/Photo_de_profil.png") }}" alt="Photo de l'utilisateur"></a><p class="name-user fw-bold mt-3">Flavien</p>
+                            <a href="" class="d-flex text-decoration-none"><img src="{{ app.user.picture }}" class="rounded-circle" alt="Photo de l'utilisateur"></a><p class="name-user fw-bold mt-3 mx-2">{{ app.user.firstname }}</p>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
@@ -37,7 +40,39 @@
                 </div>
             </div>
         </div>
+        
+        {% else %}
 
+        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="container-post d-flex justify-content-center">
+                <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image" alt="Photo de l'utilisateur"></a>
+                <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
+                    <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span></button>
+                </div>
+            </div>
+        </a>
+
+        <!-- MODALE POUR LES VISITEURS ET LES UTILISATEURS NON CONNECTÉS -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Il y a comme un problème ! 😱</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                <div class="modal-body">
+                    <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des posts.</p>
+                    <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
+                </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <a href="{{ path('signup') }}" class="text-decoration-none button-inscription-visitor">Inscription</a>
+                        <a href="{{ path('login') }}" class="btn btn-primary button-connexion-visitor">Connexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+        {% endif %}
 
 
         {# AFFICHAGE DES POSTS #}
@@ -47,12 +82,12 @@
                 <div class="post mt-5">
                 
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex">
-                            {# <img src="{{ post.author.avatar }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"> #}
-                            {# <p class="name-user fw-bold m-3">{{ post.author.name }}</p> #}
+                            <a href=""><img src="{{ app.user.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a>
+                            <p class="name-user fw-bold m-3">{{ app.user.firstname }}</p>
                         </div>
-
 
 
                         <div class="btn-group">
@@ -65,7 +100,6 @@
                             </ul>
                         </div>
                     </div>
-
                     
                     
                     <!-- MODALE EDIT POST -->
@@ -75,7 +109,8 @@
                             <div class="modal-content">
                            
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modifier votre post</h1>
+                                    <a href="" class="d-flex text-decoration-none"><img src="{{ app.user.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a>
+                                    <h1 class="modal-title ms-2 fs-5" id="exampleModalLabel">Modifier votre post</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 
@@ -92,6 +127,7 @@
                         </div>
                     </div>
                     
+
                     <!-- MODALE DELETE POST -->
                     
                     <div class="modal fade" id="exampleModal2{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -143,26 +179,53 @@
 
                 {% else %}
 
-                <div class="flex-fill d-flex flex-column mt-3">
-                        <div>
-                            <p class="content">{{ post.content }}</p>
+                <a href="" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div class="flex-fill d-flex flex-column mt-3">
+                            <div>
+                                <img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image-post mb-2" alt="Photo du visiteur">
+                                <span class="text-purple name-visitor fw-bold">
+                                    Visiteur
+                                </span> 
+                                <p class="content">{{ post.content }}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="rating d-flex">
+                                <i class="fa-regular fa-thumbs-up icon mx-2 {{ post.rating > 0 ? 'rating-up' : '' }}"></i>
+                                <p {% if post.rating > 0 %} class="rating-up ms-1" 
+                                    {% elseif post.rating < 0 %} class="rating-down" 
+                                    {% endif %}>
+                                    {{ post.rating }}
+                                </p>
+                                <i class="fa-regular fa-thumbs-down icon ms-4 mx-2 {{ post.rating < 0 ? 'rating-down' : '' }}"></i>
+                            </div>
+                            <div class="nbrOfResponse d-flex align-item-center ms-4">
+                                <i class="fa-regular fa-comment icon"></i>
+                                <p class="ms-1">{{ post.nbrOfResponse }}</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- MODALE POUR LES VISITEURS ET LES UTILISATEURS NON CONNECTÉS -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Il y a comme un problème ! 😱</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                            <div class="modal-body">
+                                <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des posts.</p>
+                                <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
+                            </div>
+                                <div class="modal-footer d-flex justify-content-center">
+                                    <a href="{{ path('signup') }}" class="btn btn-primary button-inscription-visitor">Inscription</a>
+                                    <a href="{{ path('login') }}" class="btn btn-primary button-connexion-visitor">Connexion</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center mt-3">
-                        <div class="rating d-flex">
-                            <i class="fa-regular fa-thumbs-up icon mx-2 {{ post.rating > 0 ? 'rating-up' : '' }}"></i>
-                            <p {% if post.rating > 0 %} class="rating-up ms-1" 
-                                {% elseif post.rating < 0 %} class="rating-down" 
-                                {% endif %}>
-                                {{ post.rating }}
-                            </p>
-                            <i class="fa-regular fa-thumbs-down icon ms-4 mx-2 {{ post.rating < 0 ? 'rating-down' : '' }}"></i>
-                        </div>
-                        <div class="nbrOfResponse d-flex align-item-center ms-4">
-                            <i class="fa-regular fa-comment icon"></i>
-                            <p class="ms-1">{{ post.nbrOfResponse }}</p>
-                        </div>
-                    </div>
+
                 {% endif %}  
             </div>
                                 
@@ -170,16 +233,15 @@
                 
                 </a> #}
 
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
                 <!-- MODALE DETAILS POST -->
                 <div class="modal fade" id="staticBackdrop{{ post.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header mt-2">
-                            <div class="d-flex">
-                                {# <img src="{{ post.author.avatar }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"> #}
-                                {# <p class="name-user fw-bold m-3">{{ post.author.name }}</p> #}
-                            </div>
-
+                                <a href="" class="d-flex text-decoration-none"><img src="{{ app.user.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a><p class="name-user fw-bold mt-3 mx-2">{{ app.user.firstname }}</p>
+                            
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                             <div class="modal-body">
@@ -223,9 +285,23 @@
                     </div>
                 </div>
             </div>
-
+            {% endif %}  
             
             {% endfor %}
         </ul>
     </div>
+
+
+        {# CRÉATION DU LOADER AU MOMENT DE SE CONNECTER SUR YUBO #}
+
+        <div class="loaderFinal">
+            <div class="anim-loader">
+                <img src="{{ asset("images/Yubo_Logo.png") }}" class="title-loader" alt="Logo Yubo">
+                <div class="points-container d-flex mt-5">
+                    <div class="point1"></div>
+                    <div class="point1"></div>
+                    <div class="point1"></div>
+                </div>
+            </div>
+        </div>
 {% endblock %}

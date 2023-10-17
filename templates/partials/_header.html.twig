@@ -27,44 +27,71 @@
               <li><a href="{{ path('logout') }}" class="text-decoration-none text-danger mx-2">Déconnexion</a></li>
             </ul>
           </div>
-
-          <div class="link-user mt-3">
-            
-          </div>
-
         </div>
         
       {% else %}
+      
         <div>
-          <a href="{{ path('signup') }}" class="button-inscription btn btn-primary mx-3">Inscription</a>
+          <a href="{{ path('signup') }}" class="button-inscription btn btn-light text-purple mx-3">Inscription</a>
           <a href="{{ path('login') }}" class="button-connexion btn btn-primary">Connexion</a>
         </div>
       {% endif %}
-      
     </div>
 
 
 
-      {# MENU HAMBURGER #}
-      <button class="navbar-toggler border border-light border-3 mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon  "></span>
-      </button>
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-        <div class="offcanvas-header">
-          <img src="{{ asset("images/Yubo_Logo.png") }}" class="header-logo" alt="Logo de Yubo">
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item">
-              <a href="{{ path('signup') }}" class="link-inscription nav-link active" aria-current="page" href="#">Inscription</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ path('login') }}" class="link-connexion nav-link active" href="#">Connexion</a>
-            </li>
-          </ul>
-        </div>
+    {# MENU HAMBURGER #}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+    <button class="navbar-toggler border border-light border-3 mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <img src="{{ asset("images/Yubo_Logo.png") }}" class="header-logo" alt="Logo de Yubo">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <div class="d-flex">
+            <a href="" class="d-flex text-decoration-none avatar-sidebar-animation"><img src="{{ app.user.picture }}" class="avatar-sidebar rounded-circle" alt="Photo de l'utilisateur"></a><span class="name-sidebar mt-3 ms-2">{{ app.user.firstname }}</span>
+          </div>
+          <li class="nav-item d-flex mt-2">
+          <a href="" class="link-inscription nav-link active" aria-current="page" href="#">Profil</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ path('logout') }}" class="link-connexion nav-link active text-danger" href="#">Déconnexion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    {% else %}
+    
+    
+    <button class="navbar-toggler border border-light border-3 mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <img src="{{ asset("images/Yubo_Logo.png") }}" class="header-logo" alt="Logo de Yubo">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a href="{{ path('signup') }}" class="link-inscription nav-link active" aria-current="page" href="#">Inscription</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ path('login') }}" class="link-connexion nav-link active" href="#">Connexion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    {% endif %}
+
     </div>
   </header>
 
