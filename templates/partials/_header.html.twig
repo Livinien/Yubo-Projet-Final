@@ -16,14 +16,14 @@
       {% if is_granted('IS_AUTHENTICATED_FULLY') %}
        
         <div class="btn-group user">
-         <a href=""><img src="{{ app.user.picture }}" class="header-picture-user mx-2" alt="Photo de l'utilisateur"></a>
+         <a href="{{ path('current_user') }}"><img src="{{ app.user.picture }}" class="header-picture-user mx-2" alt="Photo de l'utilisateur"></a>
           
           <div class="dropdown">
             <button class="btn btn-primary btn-user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <a href="" class="text-decoration-none text-light">{{ app.user.firstname }}</a>
             </button>
             <ul class="dropdown-menu">
-              <li><a href="" class="text-decoration-none text-purple mx-2">Profil</a></li>
+              <li><a href="{{ path('current_user') }}" class="text-decoration-none text-purple mx-2">Profil</a></li>
               <li><a href="{{ path('logout') }}" class="text-decoration-none text-danger mx-2">Déconnexion</a></li>
             </ul>
           </div>

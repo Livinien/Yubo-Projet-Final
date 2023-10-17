@@ -113,5 +113,63 @@
 }
 
 
+@media screen and (max-width: 575px) { 
+
+    .container-post {
+        width: 100%;
+    }
+
+    .post-make .message-input-visitor {
+        display: block;
+    }
+
+    .container-post .visitor-image {
+        display: block;
+    }
+
+    .post-make .modal-post {
+        margin-right: 5px;
+    }
+
+    .post-make span {
+        display: block;
+    }
+
+    .image-user {
+        display: block;
+    }
+
+    .modal-post .glass {
+        display: none;
+    }
+    
+}
 
 
+@media screen and (max-width: 400px) {
+
+    .post-make .message-input-visitor {
+        display: none;
+    }
+
+    .container-post .visitor-image {
+        display: none;
+    }
+
+    .post-make .modal-post {
+        margin-right: 5px;
+    }
+
+    .post-make span {
+        display: none;
+    }
+
+    .image-user {
+        display: none;
+    }
+
+    .modal-post .glass {
+        display: block;
+    }
+    
+}
