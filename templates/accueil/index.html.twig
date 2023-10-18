@@ -88,10 +88,12 @@
 
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex">
-                            <a href="{{ path('user', { id: post.author.id }) }}"><img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a>
-                            <p class="name-user fw-bold m-3">{{ post.author.firstname }}</p>
+                            <a href="{{ path('user', { id: post.author.id }) }}" class="text-decoration-none"><img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
+                            <div class="d-flex  ">
+                                <p class="name-user fw-bold m-3">{{ post.author.firstname }}</p></a>
+                            </div>
                         </div>
-
+                        
 
                         {% if app.user.id == post.author.id %}
                         <div class="btn-group">
@@ -105,8 +107,10 @@
                                     <li><a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a></li>
                                 </ul>
                         </div>
+                        
                         {% endif %}
                     </div>
+                        
                     
                     
                     <!-- MODALE EDIT POST -->
@@ -116,7 +120,9 @@
                             <div class="modal-content">
                            
                                 <div class="modal-header">
-                                    <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none"><img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a>
+                                    <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
+                                        <img src="{{ app.user.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
+                                    </a>
                                     <h1 class="modal-title ms-2 fs-5" id="exampleModalLabel">Modifier votre post</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
@@ -133,7 +139,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                
 
                     <!-- MODALE DELETE POST -->
                     
@@ -149,7 +155,7 @@
                                 </div>
                                 <form action="{{ path('app_delete_post', { id: post.id }) }}" class="modal-footer d-flex justify-content-center">
                                     <a href="{{ path('app_delete_post', { 'id': post.id }) }}" class="btn btn-success fw-bold w-25">Oui</a>
-                                    <button type="button" class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</button>
+                                    <a type="button" class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</a>
                                 </form>
                             </div>
                         </div>
@@ -164,6 +170,11 @@
                         <div class="flex-fill d-flex flex-column mt-3">
                             <div>
                                 <p class="content">{{ post.content }}</p>
+                                <div class="d-flex justify-content-center">
+                                    {% if post.image %}
+                                        <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
@@ -194,6 +205,9 @@
                                     Visiteur
                                 </span> 
                                 <p class="content">{{ post.content }}</p>
+                                {% if post.image %}
+                                    <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                {% endif %}
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
@@ -256,6 +270,11 @@
                                 <div class="flex-fill d-flex flex-column mt-3">
                                 <div>
                                     <p class="content">{{ post.content }}</p>
+                                    <div class="d-flex justify-content-center">
+                                        {% if post.image %}
+                                            <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-3">

@@ -322,6 +322,11 @@ textarea {
     width: 60px;
 }
 
+.post-image {
+    border-radius: 10px;
+    
+}
+
 .name-user, .nbrOfResponse {
     color: var(--background-color-violet-fonce);
     cursor: pointer;

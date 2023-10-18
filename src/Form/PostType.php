@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,7 +25,7 @@ class PostType extends AbstractType
             ->add('image', FileType::class, ['label' => false], [
                 'attr' => ['class' => 'input-image'],
                 //'multiple' => true, // Permet d'uploader plusieurs fichiers
-                //'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
+                'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
                 'required' => false, // Optionnel : permet de rendre le champ facultatif
             ])
         ;

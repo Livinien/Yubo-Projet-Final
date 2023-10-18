@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 class AccueilController extends AbstractController
@@ -27,15 +28,38 @@ class AccueilController extends AbstractController
         // CRÉATION D'UN POST
         $user = $this->getUser();
         $post = new Post();
-        
+
         $formCreatePost = $this->createForm(PostType::class, $post);
         $formCreatePost->handleRequest($request);
+
         if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
-            
+            $imageFile = $formCreatePost['image']->getData();
+            $oldImage = $post->getImage();
+
+            if ($imageFile) {
+                $newFilename = $post->get() . '.' . $imageFile->guessExtension();
+
+                // Supprimez l'ancienne image si elle existe
+                if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
+                    unlink($this->getParameter('images') . '/' . $oldImage);
+                }
+
+                try {
+                    $imageFile->move($this->getParameter('images'), $newFilename);
+                    $post->setImage($newFilename);
+                    
+                } catch (FileException $e) {
+                    // Gérez l'exception si le fichier ne peut pas être déplacé
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                    return $this->redirectToRoute('post_create'); // Redirigez vers le formulaire en cas d'erreur
+                }
+            }
+
             $post->setNbrOfResponse(0);
             $post->setRating(0);
             $post->setAuthor($user);
             $post->setCreatedAt(new \DateTimeImmutable());
+
             $em->persist($post);
             $em->flush();
             $this->addFlash('success', 'Votre poste est maintenant en ligne');
@@ -51,14 +75,15 @@ class AccueilController extends AbstractController
         // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POST DANS LA BASE DE DONNÉES ET TRIÉ DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POST.
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
         $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
-        $postId = $request->get("postId");
-        //$postForm = $em->getRepository(Post::class)->find($postId);
+        
         // dd($comments);
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $postId = $request->get("postId");
+            $postForm = $em->getRepository(Post::class)->find($postId);
             $comment->setCreatedAt(new \DateTimeImmutable());
             $comment->setRating(0);
             $comment->setAuthor($user);
