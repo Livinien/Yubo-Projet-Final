@@ -27,6 +27,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
+                       
+
                         {{ form_start(formCreatePost) }}
                         <div class="modal-body">
                             {{ form_rest(formCreatePost) }}
@@ -40,19 +42,19 @@
                 </div>
             </div>
         </div>
-        
+                    
         {% else %}
         
-            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <div class="container-post d-flex justify-content-center col-sm-6 mb-3 mb-sm-0 mx-auto">
-                    <a href=""><img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image" alt="Photo de l'utilisateur"></a>
-                    <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
-                        
-                        <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i><span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span></button>
-                    </div>
-                </div>
-            </a>
         
+        <div class="container-post d-flex justify-content-center mx-auto">
+            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image"  alt="Photo de l'utilisateur"></a>
+            <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
+                
+                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i><span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span></button>
+            </div>
+        </div>
+
+
         <!-- MODALE POUR LES VISITEURS ET LES UTILISATEURS NON CONNECTÉS -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -78,7 +80,7 @@
 
         {# AFFICHAGE DES POSTS #}
 
-        <ul class="mt-3 w-100 d-flex justify-content-center row flex-column">
+        <ul class="m-auto mb-5 mt-3 w-100 d-flex justify-content-center row flex-column">
             {% for post in posts %}
                 <div class="post mt-5 col-sm-6 mb-3 mb-sm-0 mx-auto">
                 
@@ -91,15 +93,19 @@
                         </div>
 
 
+                        {% if app.user.id == post.author.id %}
                         <div class="btn-group">
                             <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-ellipsis bullets-points fw-bold mt-2"></i>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item text-purple fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal1" href="#">Modifier</a></li>
-                                <li><a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a></li>
-                            </ul>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item text-purple fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal1" href="#">Modifier</a></li>
+                                
+                                    <li><a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a></li>
+                                </ul>
                         </div>
+                        {% endif %}
                     </div>
                     
                     
@@ -142,7 +148,7 @@
                                     <img src="{{ asset("images/Delete.gif") }}" class="rounded-2 w-100" alt="Gif de suppression de Post">
                                 </div>
                                 <form action="{{ path('app_delete_post', { id: post.id }) }}" class="modal-footer d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success fw-bold w-25">Oui</button>
+                                    <a href="{{ path('app_delete_post', { 'id': post.id }) }}" class="btn btn-success fw-bold w-25">Oui</a>
                                     <button type="button" class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</button>
                                 </form>
                             </div>
@@ -154,7 +160,7 @@
 
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         
-                    <a href="{{ path('app_comment', { id: post.id }) }}" class="d-flex flex-column text-decoration-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{post.id}}">
+                    <a href="{{ path('app_comment', { id: post.id }) }}" class="d-flex flex-column text-decoration-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ post.id }}">
                         <div class="flex-fill d-flex flex-column mt-3">
                             <div>
                                 <p class="content">{{ post.content }}</p>
@@ -279,10 +285,22 @@
                     <div class="comment">
                         <h3 class="color-purple text-center mt-2">Commentaire</h3>
                         <div class="comment-form p-3">
-                            {# {{ form_start(commentForm) }} #}
-                            {# {{ form_rest(commentForm) }} #}
+
+                         <ul>
+                            {% for comment in comments %}
+                            {% if comment.post.id == post.id %}
+                                <li>: {{ comment.content }}</li>
+                            {% endif %}
+                            {% endfor %}
+                                {# {{dump(comments)}} #}
+                        </ul>
+
+
+                            {{ form_start(commentForm) }}
+                            {{ form_rest(commentForm) }}
+                            <input type="hidden" name="postId" value="{{ post.id }}" />
                             <button type="submit" class="btn btn-primary d-flex justify-content-center button-footer mt-5">Envoyer</button>
-                            {# {{ form_end(commentForm) }} #}
+                            {{ form_end(commentForm) }}
                         </div> 
                     </div>
                 </div>

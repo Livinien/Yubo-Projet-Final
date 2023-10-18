@@ -152,7 +152,7 @@ header {
     margin-top: 145px;
     border-radius: 20px;
     padding: 20px;
-    width: 49%;
+    width: 50%;
     height: 100px;
 }
 
@@ -315,7 +315,6 @@ textarea {
     box-shadow: var(--box-shadow);
     padding: 20px 20px 0 20px;
     border-radius: 10px;
-    margin-left: -40px;
 }
 
 .post-avatar {

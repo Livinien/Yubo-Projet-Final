@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -49,22 +50,22 @@ class AccueilController extends AbstractController
 
         // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POST DANS LA BASE DE DONNÉES ET TRIÉ DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POST.
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
-
+        $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
+        $postId = $request->get("postId");
+        //$postForm = $em->getRepository(Post::class)->find($postId);
+        // dd($comments);
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            dump($request);
             $comment->setCreatedAt(new \DateTimeImmutable());
             $comment->setRating(0);
             $comment->setAuthor($user);
-            // $content = $request->request->get('content');
-            // $comment->setContent($content);
-            $comment->setPost($post);
-            $em->persist($post);
-            // $em->persist($comment);
-            // $em->flush();
+            $comment->setPost($postForm);
+            
+            $em->persist($comment);
+            $em->flush();
             $this->addFlash('success', 'Votre commentaire a bien été mis en ligne');
         }
 
@@ -74,22 +75,26 @@ class AccueilController extends AbstractController
             'formEditPost' => $formEditPost->createView(),
             'commentForm' => $commentForm,
             'posts' => $posts,
+            'comments' => $comments,
         ]);
     }
 
     
 
     // SUPPRIMER UN POST D'UN UTILISATEUR GRÂCE À SON ID
-    #[Route('/deletePost/{id}', name: 'app_delete_post')]
+    #[Route('/app_accueil/{id}', name: 'app_delete_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function delete(Post $post, EntityManagerInterface $em): RedirectResponse
     {
 
         if ($post) {
+
+            // Supprimez le post de la base de données.
             $em->remove($post);
             $em->flush();
 
             $this->addFlash('success', 'Le post a été supprimé avec succès.');
+            
         } else {
             $this->addFlash('error', 'Le post n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
         }

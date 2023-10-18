@@ -76,7 +76,7 @@
     }
 
     .post-make span {
-        margin-right: -122px;
+        margin-right: -142px;
         font-size: 14px;
     }
 }
@@ -100,6 +100,7 @@
 
     .post-make span {
         display: none;
+        margin-right: -42px;
     }
 
     .image-user {
@@ -171,5 +172,15 @@
     .modal-post .glass {
         display: block;
     }
+
+    /* SEARCH BAR IN NAVBAR */
+
+    .header-search, .header-search input, .header-search i {
+        display: none;
+        background: none;
+    }
     
 }
+
+
+
