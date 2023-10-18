@@ -37,21 +37,29 @@ class AccueilController extends AbstractController
             $oldImage = $post->getImage();
 
             if ($imageFile) {
-                $newFilename = $post->get() . '.' . $imageFile->guessExtension();
+                $newFilename = $imageFile->getClientOriginalName();
 
-                // Supprimez l'ancienne image si elle existe
-                if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
-                    unlink($this->getParameter('images') . '/' . $oldImage);
+                // Vérifiez si une image avec le même nom existe déjà
+                $newImagePath = $this->getParameter('images') . '/' . $newFilename;
+
+                if ($oldImage !== $newFilename && file_exists($newImagePath)) {
+                    // Une image avec le même nom existe déjà, ne la remplacez pas
+                    $this->addFlash('error', 'Une image avec le même nom existe déjà.');
+                    // Redirigez vers le formulaire en cas de conflit
                 }
 
                 try {
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImage($newFilename);
-                    
+
+                    // Supprimez l'ancienne image associée au post si elle existe
+                    if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
+                        unlink($this->getParameter('images') . '/' . $oldImage);
+                    }
                 } catch (FileException $e) {
                     // Gérez l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
-                    return $this->redirectToRoute('post_create'); // Redirigez vers le formulaire en cas d'erreur
+                    // Redirigez vers le formulaire en cas d'erreur
                 }
             }
 
@@ -64,7 +72,7 @@ class AccueilController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Votre poste est maintenant en ligne');
         }
-
+        
         // SOUMETTRE LE FORMULAIRE POUR LA MODIFICATION DE POST
         $formEditPost = $this->createForm(PostType::class);
         $formEditPost->handleRequest($request);
