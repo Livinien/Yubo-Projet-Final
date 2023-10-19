@@ -23,21 +23,23 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header mt-2">
-                            <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none"><img src="{{ app.user.picture }}" class="rounded-circle" alt="Photo de l'utilisateur"></a><p class="name-user fw-bold mt-3 mx-2">{{ app.user.firstname }}</p>
+                            <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
+                                <img src="{{ app.user.picture }}" class="rounded-circle" alt="Photo de l'utilisateur">
+                            </a>
+                            <p class="name-user fw-bold mt-3 mx-2">{{ app.user.firstname }}</p>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                       
-
-                        {{ form_start(formCreatePost) }}
+                        {# Novolidate désactive la validation HTML5 pour le formulaire. Ce qui permet de soumettre le formulaire sans tétécharger une image #}
+                        {{ form_start(formCreatePost, {'attr': {'novalidate': 'novalidate'}}) }}
                         <div class="modal-body">
                             {{ form_rest(formCreatePost) }}
 
                             <button type="submit" class="btn btn-primary button-footer mt-4">Publier</button>
-                        </div> 
+                        </div>
+                        {{ form_end(formCreatePost) }}
                         
 
-                        {{ form_end(formCreatePost) }}
                     </div>
                 </div>
             </div>

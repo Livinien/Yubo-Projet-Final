@@ -18,15 +18,16 @@ class PostType extends AbstractType
             ->add('content', TextareaType::class, ['label' => false],[
                 'attr' => ['class' => 'form-control',
                 'rows' => 6, 'cols' => 40,
-                'placeholder' => 'Quoi de neuf,'
+                'placeholder' => 'Quoi de neuf',
+                'required' => true,
                 ],
             ])
             
             ->add('image', FileType::class, ['label' => false], [
                 'attr' => ['class' => 'input-image'],
                 //'multiple' => true, // Permet d'uploader plusieurs fichiers
-                'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
                 'required' => false, // Optionnel : permet de rendre le champ facultatif
+                'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
             ])
         ;
     }

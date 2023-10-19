@@ -45,7 +45,6 @@ class AccueilController extends AbstractController
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
                     // Une image avec le même nom existe déjà, ne la remplacez pas
                     $this->addFlash('error', 'Une image avec le même nom existe déjà.');
-                    // Redirigez vers le formulaire en cas de conflit
                 }
 
                 try {
@@ -56,6 +55,7 @@ class AccueilController extends AbstractController
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
+                    
                 } catch (FileException $e) {
                     // Gérez l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
