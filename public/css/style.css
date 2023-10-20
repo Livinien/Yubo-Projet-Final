@@ -419,6 +419,35 @@ textarea {
 
 
 
+/* PAGE PROFIL */
+
+.title-bonjour {
+    -webkit-text-stroke: 2px var(--background-color-violet-fonce);
+    color: transparent;
+}
+
+.image-profil {
+    margin-top: 40px;
+}
+
+
+/* PAGE OTHERS USERS */
+
+.bullet-point {
+    list-style: none;
+}
+
+
+
+/* FOOTER */
+
+footer {
+    background-color: var(--background-color-violet-fonce);
+    color: var(--color-white);
+}
+
+
+
 /* LOADER CONNEXION */
 
 .anim-loader {
@@ -494,13 +523,4 @@ textarea {
         opacity: 0;
         visibility: hidden;
     }
-}
-
-
-
-/* FOOTER */
-
-footer {
-    background-color: var(--background-color-violet-fonce);
-    color: var(--color-white);
 }

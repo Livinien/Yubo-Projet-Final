@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\EditType;
 use App\Form\PostType;
 use DateTimeImmutable;
 use App\Entity\Comment;
@@ -33,9 +34,12 @@ class AccueilController extends AbstractController
         $formCreatePost->handleRequest($request);
 
         if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
+            
+            
+            // AJOUTER UNE IMAGE À UN POST (NON OBLIGATOIRE)
             $imageFile = $formCreatePost['image']->getData();
             $oldImage = $post->getImage();
-
+            
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
@@ -72,19 +76,59 @@ class AccueilController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Votre poste est maintenant en ligne');
         }
+
+
         
-        // SOUMETTRE LE FORMULAIRE POUR LA MODIFICATION DE POST
-        $formEditPost = $this->createForm(PostType::class);
+        // MODIFIER UN POST
+    
+        $formEditPost = $this->createForm(EditType::class, $post);
         $formEditPost->handleRequest($request);
+    
         if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
+            // Traitez les modifications du post ici, par exemple, la mise à jour de l'image.
+    
+            $imageFile = $formEditPost['image']->getData();
+            $oldImage = $post->getImage();
             
+            if ($imageFile) {
+                $newFilename = $imageFile->getClientOriginalName();
+    
+                // Vérifiez si une image avec le même nom existe déjà
+                $newImagePath = $this->getParameter('images') . '/' . $newFilename;
+    
+                if ($oldImage !== $newFilename and file_exists($newImagePath)) {
+                    $this->addFlash('error', 'Une image avec le même nom existe déjà.');
+                }
+    
+                try {
+                    $imageFile->move($this->getParameter('images'), $newFilename);
+                    $post->setImage($newFilename);
+    
+                    if ($oldImage and file_exists($this->getParameter('images') . '/' . $oldImage)) {
+                        unlink($this->getParameter('images') . '/' . $oldImage);
+                    }
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+                }
+            }
+    
+            // Enregistrez les modifications dans la base de données
+            $em->flush();
+    
+            $this->addFlash('success', 'Le post a été modifié avec succès.');
+    
+            return $this->redirectToRoute('app_accueil');
         }
+
+       
 
         // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POST DANS LA BASE DE DONNÉES ET TRIÉ DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POST.
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
         $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
         
-        // dd($comments);
+        
+
+        // AJOUTER UN COMMENTAIRE À UN POST
         $comment = new Comment();
         $commentForm = $this->createForm(CommentType::class, $comment);
         $commentForm->handleRequest($request);
@@ -101,7 +145,8 @@ class AccueilController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Votre commentaire a bien été mis en ligne');
         }
-
+        
+        // dd($comments);
         
         return $this->render('accueil/index.html.twig', [
             'formCreatePost' => $formCreatePost->createView(),
@@ -112,10 +157,12 @@ class AccueilController extends AbstractController
         ]);
     }
 
+
+
     
 
     // SUPPRIMER UN POST D'UN UTILISATEUR GRÂCE À SON ID
-    #[Route('/app_accueil/{id}', name: 'app_delete_post')]
+    #[Route('/app_accueil/{id}', name: 'delete_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function delete(Post $post, EntityManagerInterface $em): RedirectResponse
     {
@@ -135,26 +182,5 @@ class AccueilController extends AbstractController
         return $this->redirectToRoute('app_accueil');
     }
 
-
-
-    
-    
-    // COMMENTAIRE
-    
-    // AJOUTER UN COMMENTAIRE À UN POST
-    #[Route('addComment/{id}', name: 'app_comment')]
-    #[isGranted('IS_AUTHENTICATED_FULLY')]
-    public function comment(Request $request, Post $post, EntityManagerInterface $em): Response
-    {
-        
-        
-
-        return $this->render('accueil/comment.html.twig', [
-            'post' => $post,
-            
-        ]);
-    }
-
-    
    
 }

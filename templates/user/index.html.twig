@@ -3,20 +3,53 @@
 {% block title %}Yubo - Profil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="d-flex justify-content-center">
-    <div class="example-wrapper  mt-5">
-        <h1 class="mt-5">Hello {{ controller_name }}! ✅</h1>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code><a href="{{ '/Applications/MAMP/htdocs/Yubo - ProjetFinal/Yubo/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-            <li>Your template at <code><a href="{{ '/Applications/MAMP/htdocs/Yubo - ProjetFinal/Yubo/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-        </ul>
+    <div class="block-profil mt-5">
+
+       {{ form_start(form) }}
+        
+        <div class="image-profil d-flex justify-content-center">
+            <img src="{{ app.user.picture }}" class="avatar-profil rounded-circle mt-5" alt="Photo de Profil">
+        </div>
+
+        <h2 class="title-profil d-flex justify-content-center fw-bold mt-4"><span class="title-bonjour text-light">Bonjour</span><span class="color-purple mx-2">{{ app.user.firstname }}</span></h2>
+
+        {{ form_rest(form) }}
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary button-signup w-50 mb-5 mt-4">Enregistrer les modifications</button>
+        </div>
+
+        {{ form_end(form) }}
+
+
+        <div class="d-flex justify-content-center mt-2">
+            <button type="submit" class="btn btn-danger w-50 mb-5 mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal1{{ app.user.id }}">Supprimer mon compte</button>
+        </div>
+    
+
+        <!-- MODALE POUR SUPPRIMER SON COMPTE -->
+        <div class="modal fade" id="exampleModal1{{ app.user.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title text-center fs-5" id="exampleModalLabel">Êtes-vous sur de vouloir supprimer votre compte ?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ asset("images/Supprimer_son_compte_2.gif") }}" class="w-100 rounded-2" alt="Image de supression de compte">
+                    </div>
+                    <form action="{{ path('delete_user', { id: app.user.id }) }}" class="modal-footer d-flex justify-content-center">
+                        <a href="{{ path('delete_user', { id: app.user.id }) }}" class="btn btn-success fw-bold w-25" data-bs-dismiss="modal">Oui</a>
+                        <a class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    
+    {% endif %}
+
 {% endblock %}

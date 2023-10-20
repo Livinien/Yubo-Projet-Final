@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'Veuillez renseigner un mot de passe.')]
     #[ORM\Column]
     private ?string $password = null;
+    
+    #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit faire au moins 6 caractères.')]
+    private ?string $newPassword = null;
 
     #[Assert\NotBlank(message: 'Veuillez renseigner votre prénom.')]
     #[ORM\Column(length: 255)]
@@ -118,6 +121,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
+    }
+    
+    public function getNewPassword(): ?string
+    {
+    return $this->newPassword;
+    }
+
+    public function setNewPassword(string $newPassword): self
+    {
+    $this->newPassword = $newPassword;
+
+    return $this;
     }
 
     /**

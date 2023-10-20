@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ user.firstname }} {% endblock %}
+
+
+{% block body %}
+
+    <div class="mt-5">
+
+        <div class="image-profil d-flex justify-content-center">
+            <img src="{{ user.picture }}" class="avatar-profil rounded-circle mt-5" alt="Photo de Profil">
+        </div>
+
+        <ul class="bullet-point d-flex justify-content-center">
+            <li class="mt-3">
+                <div class="color-puple">
+                    <strong >Prénom : </strong><span>{{ user.firstname }}</span> 
+                </div>
+                <div class="mt-1 color-puple">
+                    <strong >Nom : </strong><span class="color-puple">{{ user.lastname }}</span> 
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+
+{% endblock %}
+
