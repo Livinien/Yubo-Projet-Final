@@ -23,12 +23,13 @@ class SecurityController extends AbstractController
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
+        
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             $user->setPassword($passwordHasher->hashpassword($user, $user->getPassword()));
             $em->persist($user);
             $em->flush();
-            $this->addFlash('success', 'Bienvenue sur Yubo !');
+            $this->addFlash('success', 'Votre inscription a bien été effectuée');
             return $this->redirectToRoute('login');
         }
 
@@ -49,9 +50,10 @@ class SecurityController extends AbstractController
         if($this->getUser()) {
             return $this->redirectToRoute('app_accueil');
         }
-
+        
         $error = $authenticationUtils->getLastAuthenticationError();
         $username = $authenticationUtils->getLastUsername();
+        
 
         return $this->render('security/login.html.twig', [
             'error' => $error,

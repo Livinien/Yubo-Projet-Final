@@ -41,8 +41,8 @@
                     <div class="modal-body">
                         <img src="{{ asset("images/Supprimer_son_compte_2.gif") }}" class="w-100 rounded-2" alt="Image de supression de compte">
                     </div>
-                    <form action="{{ path('delete_user', { id: app.user.id }) }}" class="modal-footer d-flex justify-content-center">
-                        <a href="{{ path('delete_user', { id: app.user.id }) }}" class="btn btn-success fw-bold w-25" data-bs-dismiss="modal">Oui</a>
+                    <form action="{{ path('delete_user', { id: app.user.id }) }}" method="POST" class="modal-footer d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success fw-bold w-25">Oui</button>
                         <a class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</a>
                     </form>
                 </div>

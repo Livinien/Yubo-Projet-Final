@@ -72,21 +72,25 @@ class UserController extends AbstractController
     
     // SUPPRIMER SON COMPTE
 
-    #[Route('/delete', name: 'delete_user')]
-    #[isGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/delete/{id}', name: 'delete_user')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function deleteProfile(Request $request, EntityManagerInterface $em, $id): Response
     {
+      
+      $userRepository = $em->getRepository(User::class);
+      $user = $userRepository->find($id);
+      
+      $this->container->get('security.token_storage')->setToken(null);
 
-        $userRepository = $em->getRepository(User::class);
-        $user = $userRepository->find($id);
+      if (!$user) {
+        throw $this->createNotFoundException('Utilisateur non trouvé.');
+      }
 
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
-        }
+      $em->remove($user);
+      $em->flush();
 
-        $em->remove($user);
-        $em->flush();
+      $this->addFlash('success', 'Votre compte utilisateur a bien été supprimé !');
 
-        return $this->redirectToRoute('app_accueil'); 
+      return $this->redirectToRoute('app_accueil');
     }
 }

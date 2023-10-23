@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\EditType;
+// use App\Form\EditType;
 use App\Form\PostType;
 use DateTimeImmutable;
 use App\Entity\Comment;
@@ -67,6 +67,8 @@ class AccueilController extends AbstractController
                 }
             }
 
+            
+
             $post->setNbrOfResponse(0);
             $post->setRating(0);
             $post->setAuthor($user);
@@ -77,48 +79,47 @@ class AccueilController extends AbstractController
             $this->addFlash('success', 'Votre poste est maintenant en ligne');
         }
 
-
         
         // MODIFIER UN POST
     
-        $formEditPost = $this->createForm(EditType::class, $post);
-        $formEditPost->handleRequest($request);
+        // $formEditPost = $this->createForm(EditType::class, $post);
+        // $formEditPost->handleRequest($request);
     
-        if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
-            // Traitez les modifications du post ici, par exemple, la mise à jour de l'image.
+        // if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
+        //     // Traitez les modifications du post ici, par exemple, la mise à jour de l'image.
     
-            $imageFile = $formEditPost['image']->getData();
-            $oldImage = $post->getImage();
+        //     $imageFile = $formEditPost['image']->getData();
+        //     $oldImage = $post->getImage();
             
-            if ($imageFile) {
-                $newFilename = $imageFile->getClientOriginalName();
+        //     if ($imageFile) {
+        //         $newFilename = $imageFile->getClientOriginalName();
     
-                // Vérifiez si une image avec le même nom existe déjà
-                $newImagePath = $this->getParameter('images') . '/' . $newFilename;
+        //         // Vérifiez si une image avec le même nom existe déjà
+        //         $newImagePath = $this->getParameter('images') . '/' . $newFilename;
     
-                if ($oldImage !== $newFilename and file_exists($newImagePath)) {
-                    $this->addFlash('error', 'Une image avec le même nom existe déjà.');
-                }
+        //         if ($oldImage !== $newFilename and file_exists($newImagePath)) {
+        //             $this->addFlash('error', 'Une image avec le même nom existe déjà.');
+        //         }
     
-                try {
-                    $imageFile->move($this->getParameter('images'), $newFilename);
-                    $post->setImage($newFilename);
+        //         try {
+        //             $imageFile->move($this->getParameter('images'), $newFilename);
+        //             $post->setImage($newFilename);
     
-                    if ($oldImage and file_exists($this->getParameter('images') . '/' . $oldImage)) {
-                        unlink($this->getParameter('images') . '/' . $oldImage);
-                    }
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
-                }
-            }
+        //             if ($oldImage and file_exists($this->getParameter('images') . '/' . $oldImage)) {
+        //                 unlink($this->getParameter('images') . '/' . $oldImage);
+        //             }
+        //         } catch (FileException $e) {
+        //             $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
+        //         }
+        //     }
     
-            // Enregistrez les modifications dans la base de données
-            $em->flush();
+        //     // Enregistrez les modifications dans la base de données
+        //     $em->flush();
     
-            $this->addFlash('success', 'Le post a été modifié avec succès.');
+        //     $this->addFlash('success', 'Le post a été modifié avec succès.');
     
-            return $this->redirectToRoute('app_accueil');
-        }
+        //     return $this->redirectToRoute('app_accueil');
+        // }
 
        
 
@@ -150,7 +151,7 @@ class AccueilController extends AbstractController
         
         return $this->render('accueil/index.html.twig', [
             'formCreatePost' => $formCreatePost->createView(),
-            'formEditPost' => $formEditPost->createView(),
+            // 'formEditPost' => $formEditPost->createView(),
             'commentForm' => $commentForm,
             'posts' => $posts,
             'comments' => $comments,

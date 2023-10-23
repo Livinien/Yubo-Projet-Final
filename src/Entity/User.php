@@ -2,16 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Serializable;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, Serializable, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -111,7 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -125,14 +126,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     public function getNewPassword(): ?string
     {
-    return $this->newPassword;
+        return $this->newPassword;
     }
 
     public function setNewPassword(string $newPassword): self
     {
-    $this->newPassword = $newPassword;
+        $this->newPassword = $newPassword;
 
-    return $this;
+        return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize([$this->id, $this->email, $this->password]);
+    }
+
+    public function unserialize($serialized)
+    {
+        [$this->id, $this->email, $this->password] = unserialize($serialized);
     }
 
     /**

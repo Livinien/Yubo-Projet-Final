@@ -142,14 +142,14 @@
                                     </button>
                                 </div>
                                 
-                                {{ form_start(formEditPost, {'attr': {'novalidate': 'novalidate'}}) }}
+                                {# {{ form_start(formEditPost, {'attr': {'novalidate': 'novalidate'}}) }}
                                 <div class="modal-body">
                                     {{ form_rest(formEditPost) }}
 
                                     <button type="submit" class="btn btn-primary button-footer mt-4">Publier</button>
                                 </div> 
 
-                                {{ form_end(formEditPost) }}
+                                {{ form_end(formEditPost) }} #}
                                 
                             </div>
                         </div>
@@ -255,10 +255,10 @@
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Il y a comme un problème ! 😱</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                            <div class="modal-body">
-                                <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des posts.</p>
-                                <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
-                            </div>
+                                <div class="modal-body">
+                                    <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des posts.</p>
+                                    <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
+                                </div>
                                 <div class="modal-footer d-flex justify-content-center">
                                     <a href="{{ path('signup') }}" class="btn btn-primary button-inscription-visitor">Inscription</a>
                                     <a href="{{ path('login') }}" class="btn btn-primary button-connexion-visitor">Connexion</a>
@@ -282,10 +282,13 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header mt-2">
-                                <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none"><img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur"></a><p class="name-user fw-bold mt-3 mx-2">{{ post.author.firstname }}</p>
+                                <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
+                                    <img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
+                                </a>
+                                <p class="name-user fw-bold mt-3 mx-2">{{ post.author.firstname }}</p>
                             
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
                             <div class="modal-body">
                                 <div class="flex-fill d-flex flex-column mt-3">
                                 <div>
