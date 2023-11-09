@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PostRepository;
-// use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -19,8 +18,6 @@ class Post
     
     private ?int $id = null;
 
-    // #[Assert\NotBlank(message: 'Veuiller mettre du contenu dans le champs de texte')]
-    // #[Assert\Length(min: 100, minMessage: 'Veuiller mettre du contenu dans le champs de texte')]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 

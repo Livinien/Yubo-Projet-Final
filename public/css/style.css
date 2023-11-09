@@ -269,6 +269,11 @@ textarea {
     min-height: 150px;
 }
 
+.help-text {
+    color: var(--background-color-violet-fonce);
+}
+
+
 .form-errors {
     color: var(--danger);
     font-size: var(--font-size-small);

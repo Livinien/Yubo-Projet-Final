@@ -16,6 +16,7 @@ class SecurityController extends AbstractController
 {
 
     // INSCRIPTION DE L'UTILISATEUR
+    
     #[Route('/signup', name: 'signup')]
     public function signup(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -43,6 +44,7 @@ class SecurityController extends AbstractController
 
     
     // CONNEXION DE L'UTILISATEUR
+    
     #[Route('/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -64,6 +66,7 @@ class SecurityController extends AbstractController
 
     
     // DÉCONNEXION DE L'UTILISATEUR
+    
     #[Route('/logout', name: 'logout')]
     public function logout()
     {

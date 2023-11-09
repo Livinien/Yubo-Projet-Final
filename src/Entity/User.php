@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -12,15 +11,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, Serializable, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\Email(message: 'Veuillez entrer une adresse mail valide.')]
-    #[Assert\NotBlank(message: 'Veuillez renseigner une adresse mail.')]
+    // #[Assert\Email(message: 'Veuillez entrer une adresse mail valide.')]
+    // #[Assert\NotBlank(message: 'Veuillez renseigner une adresse mail.')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -30,12 +29,12 @@ class User implements UserInterface, Serializable, PasswordAuthenticatedUserInte
     /**
      * @var string The hashed password
      */
-    #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit faire au moins 6 caractères.')]
-    #[Assert\NotBlank(message: 'Veuillez renseigner un mot de passe.')]
+    // #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit faire au moins 6 caractères.')]
+    // #[Assert\NotBlank(message: 'Veuillez renseigner un mot de passe.')]
     #[ORM\Column]
     private ?string $password = null;
     
-    #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit faire au moins 6 caractères.')]
+    // #[Assert\Length(min: 6, minMessage: 'Le mot de passe doit faire au moins 6 caractères.')]
     private ?string $newPassword = null;
 
     #[Assert\NotBlank(message: 'Veuillez renseigner votre prénom.')]
@@ -134,16 +133,6 @@ class User implements UserInterface, Serializable, PasswordAuthenticatedUserInte
         $this->newPassword = $newPassword;
 
         return $this;
-    }
-
-    public function serialize()
-    {
-        return serialize([$this->id, $this->email, $this->password]);
-    }
-
-    public function unserialize($serialized)
-    {
-        [$this->id, $this->email, $this->password] = unserialize($serialized);
     }
 
     /**

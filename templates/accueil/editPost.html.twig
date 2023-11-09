@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Yubo - hello{% endblock %}
+
+{% block body %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+    <div class="mt-5">
+        {{ form_start(formEditPost, {'attr': {'novalidate': 'novalidate'}}) }}
+        <div class="modal-body mt-5">
+            {{ form_rest(formEditPost) }}
+
+            <button type="submit" class="btn btn-primary button-footer mt-4">Publier</button>
+        </div> 
+    </div>
+    {{ form_end(formEditPost) }}
+
+    {% endif %}
+
+{% endblock %}

@@ -3,15 +3,15 @@
 {% block title %}Yubo - Inscription{% endblock %}
 
 
-
 {% block body %}
-    <div class="inscription">
+
+    <div class="inscription w-50">
         <h2 class="title-inscription text-purple-inscription d-flex justify-content-center ">Inscription</h2>
 
         {{ form_start(form) }}
 
-
         {{ form_rest(form) }}
+
         <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary button-signup mb-4 mt-4">S'inscrire</button>
         </div>
@@ -22,6 +22,7 @@
             </div>
         {{ form_end(form) }}
     </div>
+
 {% endblock %}
 
 

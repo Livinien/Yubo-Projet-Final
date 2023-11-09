@@ -15,7 +15,8 @@
             <a href="{{ path('user', { id: app.user.id }) }}" class="mx-2">
             <img src="{{ app.user.picture }}" class="image-user rounded-circle" alt="Photo de l'utilisateur"></a>
             <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
-                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i>
+                <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i>
                 <span class="message-input-user">Quoi de neuf, {{ app.user.firstname }} ?</span>
                 </button>
             </div>
@@ -53,12 +54,13 @@
         
         <div class="container-post d-flex justify-content-center mx-auto">
             <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image"  alt="Photo de l'utilisateur"></a>
+                <img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image"  alt="Photo de l'utilisateur">
+            </a>
             <div class="post-make d-flex justify-content-center flex-fill p-2 mx-1">
                 
                 <button type="button" class="btn btn-primary modal-post" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i>
-                <span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span>
+                    <i class="fa-solid fa-magnifying-glass glass text-purple mx-5"></i>
+                    <span class="message-input-visitor">Quoi de neuf, cher visiteur ?</span>
                 </button>
             </div>
         </div>
@@ -92,7 +94,7 @@
 
         <ul class="m-auto mb-5 mt-3 w-100 d-flex justify-content-center row flex-column">
             {% for post in posts %}
-                <div class="post mt-5 col-sm-6 mb-3 mb-sm-0 mx-auto">
+                <div class="post mt-5 col-sm-6 mb-3 mb-sm-0 mx-auto" id="modal{{ post.id }}" data-id="modal{{ post.id }}">
                 
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
@@ -108,13 +110,15 @@
 
                         {% if app.user.id == post.author.id %}
                         <div class="btn-group">
-                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-ellipsis bullets-points fw-bold mt-2"></i>
+                            
+                            <button class="edit-post btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-ellipsis bullets-points fw-bold mt-2"></i>
                             </button>
+                            
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item text-purple fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal1" href="#">Modifier</a>
+                                        <a class="dropdown-item text-purple fw-bold" href="{{ path('edit_post', { id: post.id }) }}">Modifier</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a>
@@ -141,16 +145,6 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
-                                
-                                {# {{ form_start(formEditPost, {'attr': {'novalidate': 'novalidate'}}) }}
-                                <div class="modal-body">
-                                    {{ form_rest(formEditPost) }}
-
-                                    <button type="submit" class="btn btn-primary button-footer mt-4">Publier</button>
-                                </div> 
-
-                                {{ form_end(formEditPost) }} #}
-                                
                             </div>
                         </div>
                     </div>
@@ -169,10 +163,11 @@
                                 <div class="modal-body">
                                     <img src="{{ asset("images/Delete.gif") }}" class="rounded-2 w-100" alt="Gif de suppression de Post">
                                 </div>
-                                <form action="{{ path('delete_post', { id: post.id }) }}" class="modal-footer d-flex justify-content-center">
+                                <div class="modal-footer d-flex justify-content-center">
                                     <a href="{{ path('delete_post', { 'id': post.id }) }}" class="btn btn-success fw-bold w-25">Oui</a>
                                     <a type="button" class="btn btn-danger fw-bold w-25" data-bs-dismiss="modal">Non</a>
-                                </form>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -284,8 +279,8 @@
                             <div class="modal-header mt-2">
                                 <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
                                     <img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
+                                    <p class="name-user fw-bold mt-3 mx-2">{{ post.author.firstname }}</p>
                                 </a>
-                                <p class="name-user fw-bold mt-3 mx-2">{{ post.author.firstname }}</p>
                             
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -315,15 +310,17 @@
                                         {{ post.rating }}
                                     </p> #}
                                 </div>
-                                <div class="nbrOfResponse d-flex align-item-center ms-4">
-                                    <i class="fa-regular fa-comment icon"></i>
-                                    <p class="ms-1">{{ post.nbrOfResponse }}</p>
-                                </div>
+                                {# <a href="{{ path('add_comment', { id: post.id }) }}" class="text-decoration-none"> #}
+                                    <div class="nbrOfResponse d-flex align-item-center ms-4">
+                                        <i class="fa-regular fa-comment icon"></i>
+                                        <p class="ms-1">{{ post.nbrOfResponse }}</p>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
+                {# <div class="d-flex justify-content-center">
                     <div class="comment">
                         <h3 class="color-purple text-center mt-2">Commentaire</h3>
                         <div class="comment-form p-3">
@@ -335,7 +332,7 @@
                             {% endif %}
                             {% endfor %}
                                 {# {{dump(comments)}} #}
-                        </ul>
+                        {# </ul>
 
 
                             {{ form_start(commentForm) }}
@@ -345,7 +342,7 @@
                             {{ form_end(commentForm) }}
                         </div> 
                     </div>
-                </div>
+                </div>  #}
             </div>
             {% endif %}  
             
