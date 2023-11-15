@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class PostType extends AbstractType
 {
@@ -22,7 +23,12 @@ class PostType extends AbstractType
                 ],
             ])
             
-            ->add('image', FileType::class, ['label' => false], [
+            ->add('imageFile', VichFileType::class, 
+            [
+                'label' => false,
+                'mapped' => false,
+            ], 
+            [
                 'attr' => ['class' => 'input-image'],
                 //'multiple' => true, // Permet d'uploader plusieurs fichiers
                 'required' => false, // Optionnel : permet de rendre le champ facultatif

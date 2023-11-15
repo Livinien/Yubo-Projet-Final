@@ -265,6 +265,10 @@ textarea {
     background-color: var(--background-color-violet-very-clair);
 }
 
+.form-row .vich-file input {
+    width: 100%;
+}
+
 .form-row textarea {
     min-height: 150px;
 }

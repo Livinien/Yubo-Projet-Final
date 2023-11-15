@@ -184,8 +184,8 @@
                             <div>
                                 <p class="content">{{ post.content }}</p>
                                 <div class="d-flex justify-content-center">
-                                    {% if post.image %}
-                                        <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                    {% if post.imageName %}
+                                            <img src="{{ asset('uploads/' ~ post.imageName) }}" class="post-image w-100" alt="Image du post">
                                     {% endif %}
                                 </div>
                             </div>
@@ -220,8 +220,8 @@
                                     Visiteur
                                 </span> 
                                 <p class="content">{{ post.content }}</p>
-                                {% if post.image %}
-                                    <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                {% if post.imageName %}
+                                            <img src="{{ asset('uploads/' ~ post.imageName) }}" class="post-image w-100" alt="Image du post">
                                 {% endif %}
                             </div>
                         </div>
@@ -289,8 +289,8 @@
                                 <div>
                                     <p class="content">{{ post.content }}</p>
                                     <div class="d-flex justify-content-center">
-                                        {% if post.image %}
-                                            <img src="{{ asset('uploads/' ~ post.image) }}" class="post-image w-100" alt="Image du post">
+                                        {% if post.imageName %}
+                                            <img src="{{ asset('uploads/' ~ post.imageName) }}" class="post-image w-100" alt="Image du post">
                                         {% endif %}
                                     </div>
                                 </div>

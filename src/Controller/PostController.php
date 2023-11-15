@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\EditType;
 use App\Form\PostType;
 use DateTimeImmutable;
 use App\Entity\Comment;
@@ -16,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 
 
 
@@ -63,8 +63,8 @@ class PostController extends AbstractController
             
             
             // AJOUTER UNE IMAGE À UN POST (NON OBLIGATOIRE)
-            $imageFile = $formCreatePost['image']->getData();
-            $oldImage = $post->getImage();
+            $imageFile = $formCreatePost['imageFile']->getData();
+            $oldImage = $post->getImageFile();
             
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
@@ -79,7 +79,7 @@ class PostController extends AbstractController
 
                 try {
                     $imageFile->move($this->getParameter('images'), $newFilename);
-                    $post->setImage($newFilename);
+                    $post->setImageName($newFilename);
 
                     // Supprimez l'ancienne image associée au post si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
@@ -117,6 +117,7 @@ class PostController extends AbstractController
     {
         
         // Récupérez le post à éditer en fonction de l'identifiant ($id)
+        /** @var Post $post */
         $post = $em->getRepository(Post::class)->find($id);
         
 
@@ -124,15 +125,14 @@ class PostController extends AbstractController
             // Gérez le cas où le post n'a pas été trouvé (par exemple, redirigez vers une page d'erreur)
         }
 
-        $formEditPost = $this->createForm(EditType::class, $post);
+        $formEditPost = $this->createForm(PostType::class, $post);
         $formEditPost->handleRequest($request);
 
         if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
             
             // AJOUTER UNE IMAGE À UN POST (NON OBLIGATOIRE)
-            $imageFile = $formEditPost['image']->getData();
-            //dd($imageFile);
-            $oldImage = $post->getImage();
+            $imageFile = $formEditPost['imageFile']->getData();
+            $oldImage = $post->getImageFile();
             
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
@@ -147,7 +147,7 @@ class PostController extends AbstractController
 
                 try {
                     $imageFile->move($this->getParameter('images'), $newFilename);
-                    $post->setImage($newFilename);
+                    $post->setImageName($newFilename);
 
                     // Supprimez l'ancienne image associée au post si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
