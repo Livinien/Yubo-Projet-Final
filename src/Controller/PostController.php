@@ -159,6 +159,9 @@ class PostController extends AbstractController
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
                     // Redirigez vers le formulaire en cas d'erreur
                 }
+                
+            } else {
+                $post->setImageName(null);
             }
     
             // Enregistrez les modifications dans la base de données
@@ -169,7 +172,6 @@ class PostController extends AbstractController
     
         }
 
-        // return $formEditPost;
         return $this->render('accueil/editPost.html.twig', [
             'formEditPost' => $formEditPost->createView(),
         ]);

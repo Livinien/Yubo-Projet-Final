@@ -23,6 +23,7 @@ class PostType extends AbstractType
                 ],
             ])
             
+            
             ->add('imageFile', VichFileType::class, 
             [
                 'label' => false,
@@ -38,13 +39,12 @@ class PostType extends AbstractType
         ;
     }
 
-    
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             // Configure your form options here
-
             'data_class' => Post::class
         ]);
     }
