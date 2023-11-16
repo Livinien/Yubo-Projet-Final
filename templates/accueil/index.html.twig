@@ -102,7 +102,7 @@
                         <div class="d-flex">
                             <a href="{{ path('user', { id: post.author.id }) }}" class="text-decoration-none">
                             <img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
-                            <div class="d-flex  ">
+                            <div class="d-flex">
                                 <p class="name-user fw-bold m-3">{{ post.author.firstname }}</p></a>
                             </div>
                         </div>
@@ -115,15 +115,14 @@
                             <i class="fa-solid fa-ellipsis bullets-points fw-bold mt-2"></i>
                             </button>
                             
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item text-purple fw-bold" href="{{ path('edit_post', { id: post.id }) }}">Modifier</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a>
-                                    </li>
-                                </ul>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item text-purple fw-bold" href="{{ path('edit_post', { id: post.id }) }}">Modifier</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal2{{ post.id }}" href="#">Supprimer</a>
+                                </li>
+                            </ul>
                         </div>
                         
                     {% endif %}
@@ -133,7 +132,7 @@
                 
                     <!-- MODALE EDIT POST -->
                     
-                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                            
@@ -277,7 +276,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header mt-2">
-                                <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
+                                <a href="{{ path('user', { id: post.author.id }) }}" class="d-flex text-decoration-none">
                                     <img src="{{ post.author.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
                                     <p class="name-user fw-bold mt-3 mx-2">{{ post.author.firstname }}</p>
                                 </a>

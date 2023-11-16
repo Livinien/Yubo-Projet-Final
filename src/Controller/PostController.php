@@ -111,7 +111,7 @@ class PostController extends AbstractController
     
     // MODIFIER UN POST
     
-    #[Route('/app_accueil/edit_post/{id}', name: 'edit_post')]
+    #[Route('/app_accueil/{id}', name: 'edit_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function editPost(Request $request, EntityManagerInterface $em, $id): Response
     {
