@@ -111,7 +111,7 @@ class PostController extends AbstractController
     
     // MODIFIER UN POST
     
-    #[Route('/app_accueil/{id}', name: 'edit_post')]
+    #[Route('/app_accueil/edit_post/{id}', name: 'edit_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function editPost(Request $request, EntityManagerInterface $em, $id): Response
     {
@@ -163,8 +163,9 @@ class PostController extends AbstractController
     
             // Enregistrez les modifications dans la base de données
             $em->flush();
-    
-            $this->addFlash('success', 'Le post a été modifié avec succès.');
+            $this->addFlash('success', 'Le poste a été modifié avec succès.');
+            
+            return $this->redirectToRoute('app_accueil');
     
         }
 
@@ -205,7 +206,7 @@ class PostController extends AbstractController
     
 
     
-    // SUPPRIMER UN POST D'UN UTILISATEUR
+    // SUPPRIMER UN POSTE D'UN UTILISATEUR
     
     #[Route('/app_accueil/delete/{id}', name: 'delete_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
@@ -220,10 +221,10 @@ class PostController extends AbstractController
             $em->remove($post);
             $em->flush();
 
-            $this->addFlash('success', 'Le post a été supprimé avec succès.');
+            $this->addFlash('success', 'Le poste a été supprimé avec succès.');
             
         } else {
-            $this->addFlash('error', 'Le post n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
+            $this->addFlash('error', 'Le poste n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
         }
 
         return $this->redirectToRoute('app_accueil');

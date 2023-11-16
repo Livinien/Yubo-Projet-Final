@@ -163,7 +163,7 @@ header {
 
 
 
-/* VISITOR IMAGE */
+/* VISITEUR IMAGE */
 
 .container-post .visitor-image {
     width: 120%;
@@ -424,6 +424,28 @@ textarea {
 
 .color-purple {
     color: var(--background-color-violet-fonce) !important;
+}
+
+
+
+
+/* PAGE - MODIFICATION DE POSTE */
+
+.editPost {
+    margin-top: 110px;
+    padding-bottom: 20px;
+}
+
+#post_imageFile_delete {
+    display: none;
+}
+
+.vich-file a {
+    display: none;
+}
+
+.vich-file label:nth-child(1) {
+    display: none;
 }
 
 
