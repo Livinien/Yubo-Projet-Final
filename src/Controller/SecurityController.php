@@ -24,14 +24,21 @@ class SecurityController extends AbstractController
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
-        
+       
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user->setPassword($passwordHasher->hashpassword($user, $user->getPassword()));
-            $em->persist($user);
-            $em->flush();
-            $this->addFlash('success', 'Votre inscription a bien été effectuée');
-            return $this->redirectToRoute('login');
+            $newEmail = $user->getEmail();
+            $oldUser = $em->getRepository(User::class)->findOneBy(['email' => $newEmail]);
+            if ($oldUser){
+                $this->addFlash('danger', "L'email a déjà été utilisé");
+            }
+            else {
+                $user->setPassword($passwordHasher->hashpassword($user, $user->getPassword()));
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('success', 'Votre inscription a bien été effectuée');
+                return $this->redirectToRoute('login');
+            }
         }
 
         return $this->render('security/signup.html.twig', [

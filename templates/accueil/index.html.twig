@@ -75,10 +75,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
-                <div class="modal-body">
-                    <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des postes.</p>
-                    <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
-                </div>
+                    <div class="modal-body">
+                        <p class="message-visitor">Vous devez vous connecter ou vous inscrire pour pouvoir interagir avec les autres utilisateurs et créer des postes.</p>
+                        <img src="{{ asset("images/Accueil_Visiteur.gif") }}" class="image-gif-visitor" alt="Gif de Jim Carrey qui tape sur le clavier">
+                    </div>
                     <div class="modal-footer d-flex justify-content-center">
                         <a href="{{ path('signup') }}" class="text-decoration-none button-inscription-visitor">Inscription</a>
                         <a href="{{ path('login') }}" class="btn btn-primary button-connexion-visitor">Connexion</a>
@@ -110,7 +110,7 @@
 
                         {% if app.user.id == post.author.id %}
                         <div class="btn-group">
-                            
+                        
                             <button class="edit-post btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-ellipsis bullets-points fw-bold mt-2"></i>
                             </button>
@@ -212,7 +212,7 @@
                 {% else %}
 
                 <a class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="flex-fill d-flex flex-column mt-3">
+                    <div class="flex-fill d-flex flex-column">
                             <div>
                                 <img src="{{ asset("images/Photo_de_profil.png") }}" class="visitor-image-post mb-2" alt="Photo du visiteur">
                                 <span class="text-purple name-visitor fw-bold">

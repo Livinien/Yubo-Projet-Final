@@ -8,9 +8,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserController extends AbstractController
 {
@@ -45,7 +46,11 @@ class UserController extends AbstractController
       $userForm->remove('password');
       $userForm->add('newPassword', PasswordType::class, [
         'label' => 'Nouveau mot de passe',
-        'required' => false
+        'required' => false,
+          'constraints' => [
+            new Regex('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
+            "Vous devez impérativement avoir 8 caractères minimum, contenant des chiffres, lettres, majuscules, minuscules et des caractères spéciaux pour créer votre compte.")
+        ],
         ]);
     
       $userForm->handleRequest($request);

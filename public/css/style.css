@@ -23,11 +23,10 @@
 }
 
 
-/* UNIVERSAL SELECTOR */
+/* SELECTEUR UNIVERSEL */
 * {
     margin: 0;
     padding: 0;
-    /* Voir ChatGPT pour le box-sizing */
     box-sizing: border-box;
 }
 
@@ -38,11 +37,6 @@ body {
     min-height: 100vh;
     font-family: var(--font-family);
 }
-
-.flex-fill {
-    flex: 1;
-}
-
 
 
 /* HEADER */
@@ -324,6 +318,7 @@ textarea {
     box-shadow: var(--box-shadow);
     padding: 20px 20px 0 20px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .post-avatar {

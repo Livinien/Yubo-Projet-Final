@@ -20,7 +20,14 @@
                     <a href="{{ path('login') }}" class="text-decoration-none text-purple">Connectez-vous</a>
                 </small>
             </div>
+            
         {{ form_end(form) }}
+
+        {% for flashMessage in app.flashes('danger') %}
+            <div class="alert alert-danger text-center">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
     </div>
 
 {% endblock %}

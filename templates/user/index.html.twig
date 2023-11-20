@@ -14,9 +14,15 @@
             <img src="{{ app.user.picture }}" class="avatar-profil rounded-circle mt-5" alt="Photo de Profil">
         </div>
 
-        <h2 class="title-profil d-flex justify-content-center fw-bold mt-4"><span class="title-bonjour text-light">Bonjour</span><span class="color-purple mx-2">{{ app.user.firstname }}</span></h2>
+        <h2 class="title-profil d-flex justify-content-center fw-bold mt-4">
+            <span class="title-bonjour text-light">Bonjour</span>
+            <span class="color-purple mx-2">{{ app.user.firstname }}</span>
+        </h2>
 
         {{ form_rest(form) }}
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
         <div class="d-flex justify-content-center">
             <button type="submit" class="btn btn-primary button-signup w-50 mb-5 mt-4">Enregistrer les modifications</button>
         </div>
