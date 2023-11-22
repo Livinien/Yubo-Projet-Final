@@ -85,6 +85,10 @@ header {
     background-color: var(--success);
 }
 
+.flash-danger {
+    background-color: var(--danger);
+}
+
 
 /* UTILISATEUR CONNECTÉ */
 

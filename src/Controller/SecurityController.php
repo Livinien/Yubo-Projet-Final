@@ -29,9 +29,11 @@ class SecurityController extends AbstractController
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             $newEmail = $user->getEmail();
             $oldUser = $em->getRepository(User::class)->findOneBy(['email' => $newEmail]);
+            
             if ($oldUser){
                 $this->addFlash('danger', "L'email a déjà été utilisé");
             }
+            
             else {
                 $user->setPassword($passwordHasher->hashpassword($user, $user->getPassword()));
                 $em->persist($user);

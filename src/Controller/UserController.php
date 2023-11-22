@@ -16,22 +16,21 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
 
-    
-    #[Route('/user/{id}', name: 'user')]
-    #[isGranted('IS_AUTHENTICATED_FULLY')]
-    public function userProfile(User $user): Response
-    {
+  #[Route('/user/{id}', name: 'user')]
+  #[isGranted('IS_AUTHENTICATED_FULLY')]
+  public function userProfile(User $user): Response
+  {
 
-        $currentUser = $this->getUser();
+    $currentUser = $this->getUser();
 
-        if($currentUser === $user) {
-            return $this-> redirectToRoute('current_user');
-        }
-        
-        return $this->render('user/show.html.twig', [
-            'user' => $user
-        ]);
+    if($currentUser === $user) {
+        return $this-> redirectToRoute('current_user');
     }
+    
+    return $this->render('user/show.html.twig', [
+        'user' => $user
+    ]);
+  }
     
     
     
@@ -47,11 +46,14 @@ class UserController extends AbstractController
       $userForm->add('newPassword', PasswordType::class, [
         'label' => 'Nouveau mot de passe',
         'required' => false,
-          'constraints' => [
-            new Regex('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
-            "Vous devez impérativement avoir 8 caractères minimum, contenant des chiffres, lettres, majuscules, minuscules et des caractères spéciaux pour créer votre compte.")
+        'constraints' => [
+          new Regex('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
+          "Vous devez impérativement avoir 8 caractères minimum, contenant des chiffres, lettres, majuscules, minuscules et des caractères spéciaux pour modifier votre mot de passe de profil.")
         ],
-        ]);
+      
+        'help' => "*Vous avez besoin d'un mot de passe de 8 caractères minimum, contenant des chiffres, lettres, majuscules, minuscules et des caractères spéciaux.",
+        
+      ]);
     
       $userForm->handleRequest($request);
       

@@ -32,6 +32,14 @@ class PostController extends AbstractController
         // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POSTE DANS LA BASE DE DONNÉES ET TRIÉES DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POSTE.
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
         // $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
+
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $this->addFlash('success', 'Vous êtes maintenant connecté.');
+            
+        } else {
+            $this->addFlash('success', 'Vous êtes maintenant déconnecté.');
+        }
+        
         
         
         return $this->render('accueil/index.html.twig', [
@@ -61,19 +69,18 @@ class PostController extends AbstractController
 
         if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
             
-            
-            // AJOUTER UNE IMAGE À UN POST (NON OBLIGATOIRE)
+            // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
             $imageFile = $formCreatePost['imageFile']->getData();
             $oldImage = $post->getImageFile();
             
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
-                // Vérifiez si une image avec le même nom existe déjà
+                // Vérifier si une image avec le même nom existe déjà
                 $newImagePath = $this->getParameter('images') . '/' . $newFilename;
 
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
-                    // Une image avec le même nom existe déjà, ne la remplacez pas
+                    // Une image avec le même nom existe déjà, ne la remplacer pas
                     $this->addFlash('error', 'Une image avec le même nom existe déjà.');
                 }
 
@@ -81,20 +88,19 @@ class PostController extends AbstractController
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
-                    // Supprimez l'ancienne image associée au post si elle existe
+                    // Supprimer l'ancienne image associée au poste si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
                     
                 } catch (FileException $e) {
-                    // Gérez l'exception si le fichier ne peut pas être déplacé
+                    // Gérer l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
-                    // Redirigez vers le formulaire en cas d'erreur
                 }
             }
 
-            $post->setNbrOfResponse(0);
-            $post->setRating(0);
+            // $post->setNbrOfResponse(0);
+            // $post->setRating(0);
             $post->setAuthor($user);
             $post->setCreatedAt(new \DateTimeImmutable());
 
@@ -116,13 +122,13 @@ class PostController extends AbstractController
     public function editPost(Request $request, EntityManagerInterface $em, $id): Response
     {
         
-        // Récupérez le post à éditer en fonction de l'identifiant ($id)
+        // Récupérer le poste à éditer en fonction de l'identifiant ($id)
         /** @var Post $post */
         $post = $em->getRepository(Post::class)->find($id);
         
 
         if (!$post) {
-            // Gérez le cas où le post n'a pas été trouvé (par exemple, redirigez vers une page d'erreur)
+            // Gérer le cas où le poste n'a pas été trouvé (par exemple, rediriger vers une page d'erreur)
         }
 
         $formEditPost = $this->createForm(PostType::class, $post);
@@ -130,18 +136,18 @@ class PostController extends AbstractController
 
         if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
             
-            // AJOUTER UNE IMAGE À UN POST (NON OBLIGATOIRE)
+            // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
             $imageFile = $formEditPost['imageFile']->getData();
             $oldImage = $post->getImageFile();
             
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
-                // Vérifiez si une image avec le même nom existe déjà
+                // Vérifie si une image avec le même nom existe déjà
                 $newImagePath = $this->getParameter('images') . '/' . $newFilename;
 
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
-                    // Une image avec le même nom existe déjà, ne la remplacez pas
+                    // Une image avec le même nom existe déjà, ne la remplace pas
                     $this->addFlash('error', 'Une image avec le même nom existe déjà.');
                 }
 
@@ -149,22 +155,22 @@ class PostController extends AbstractController
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
-                    // Supprimez l'ancienne image associée au post si elle existe
+                    // Supprimer l'ancienne image associée au poste si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
                     
                 } catch (FileException $e) {
-                    // Gérez l'exception si le fichier ne peut pas être déplacé
+                    // Gérer l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
-                    // Redirigez vers le formulaire en cas d'erreur
+                    
                 }
                 
             } else {
                 $post->setImageName(null);
             }
     
-            // Enregistrez les modifications dans la base de données
+            // Enregistrer les modifications dans la base de données
             $em->flush();
             $this->addFlash('success', 'Le poste a été modifié avec succès.');
             
@@ -219,7 +225,7 @@ class PostController extends AbstractController
             $postRepository = $em->getRepository(Post::class);
             $post = $postRepository->find($id);
 
-            // Supprimez le post de la base de données.
+            // Supprimer le poste de la base de données.
             $em->remove($post);
             $em->flush();
 

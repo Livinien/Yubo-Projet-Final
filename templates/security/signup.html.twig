@@ -23,11 +23,6 @@
             
         {{ form_end(form) }}
 
-        {% for flashMessage in app.flashes('danger') %}
-            <div class="alert alert-danger text-center">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
     </div>
 
 {% endblock %}
