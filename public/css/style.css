@@ -216,13 +216,11 @@ header {
 }
 
 .form-control, label {
-    width: 700px;
     color: var(--background-color-violet-fonce);
     margin-top: 3px;
 }
 
 .button-signup {
-    width: 20%;
     background-color: var(--background-color-violet-fonce);
 }
 

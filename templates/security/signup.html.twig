@@ -8,12 +8,12 @@
     <div class="inscription w-50">
         <h2 class="title-inscription text-purple-inscription d-flex justify-content-center ">Inscription</h2>
 
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'class': 'w-100'}}) }}
 
         {{ form_rest(form) }}
 
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary button-signup mb-4 mt-4">S'inscrire</button>
+            <button type="submit" class="button-signup btn btn-primary mb-4 mt-4">S'inscrire</button>
         </div>
             <div class="d-flex justify-content-center mt-3 mb-4">
                 <small>Vous avez déjà un compte ?

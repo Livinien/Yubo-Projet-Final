@@ -143,7 +143,19 @@
     .modal-post .glass {
         display: none;
     }
+
+    .button-signup, .button-delete {
+        font-size: 10px;
+    }
     
+}
+
+
+@media screen and (max-width: 371px) { 
+
+    .button-signup, .button-delete {
+        font-size: 8px;
+    }
 }
 
 
