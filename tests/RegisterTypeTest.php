@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 class RegisterTypeTest extends TestCase
 {
 
-    // TEST UNITAIRE POUR SAVOIR SI LE PASSWORD ET CONSTRAINT FONCTIONNE BIEN
+    // TEST UNITAIRE POUR SAVOIR SI LE MOT DE PASSE ET LES CONTRAINTES FONCTIONNENT BIEN
     public function testValidPassword()
     {
         $validator = Validation::createValidator();
@@ -26,7 +26,7 @@ class RegisterTypeTest extends TestCase
     }
 
     
-    // TEST UNITAIRE POUR SAVOIR SI LE PASSWORD ET CONSTRAINT SONT INVALIDES
+    // TEST UNITAIRE POUR SAVOIR SI LE MOT DE PASSE ET CONTRAINTES SONT INVALIDES
     public function testInvalidPassword()
     {
         $validator = Validation::createValidator();

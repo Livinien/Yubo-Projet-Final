@@ -57,10 +57,12 @@ class UserController extends AbstractController
     
       $userForm->handleRequest($request);
       
+      // Soumission du nouveau mot de passe en BDD
       if ($userForm->isSubmitted() && $userForm->isValid()) {
         
         $newPassword = $user->getNewPassword();
         
+        // Hachage et envoie du nouveau mot de passe en BDD
         if ($newPassword) {
           $hash = $passwordHasher->hashPassword($user, $newPassword);
           $user->setPassword($hash);

@@ -21,19 +21,23 @@ class SecurityController extends AbstractController
     public function signup(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
 
+        // Création de l'instance de la classe "User"
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
-       
+        
 
+        // Soumission du formulaire d'inscription
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             $newEmail = $user->getEmail();
             $oldUser = $em->getRepository(User::class)->findOneBy(['email' => $newEmail]);
-            
+
+            // Si l'email de l'utilisateur existe déjà dans la BDD
             if ($oldUser){
                 $this->addFlash('danger', "L'email a déjà été utilisé");
             }
             
+            // Hachage de mot de passe et envoyé les informations en BDD
             else {
                 $user->setPassword($passwordHasher->hashpassword($user, $user->getPassword()));
                 $em->persist($user);
@@ -43,9 +47,9 @@ class SecurityController extends AbstractController
             }
         }
 
+        // Le rendu de la page du formulaire d'inscription 
         return $this->render('security/signup.html.twig', [
             'form' => $userForm->createView(),
-            
         ]);
     }
     
@@ -57,15 +61,17 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
+        // Utilisateur connecté et redirection pas d'accueil
         if($this->getUser()) {
             return $this->redirectToRoute('app_accueil');
         }
         
+        // Je récupère la dernière erreur d'authentification / le dernier nom de l'utilisateur 
         $error = $authenticationUtils->getLastAuthenticationError();
         $username = $authenticationUtils->getLastUsername();
         
-
+        
+        // Le rendu de la page du formulaire de connexion + erreur et nom d'utilisateur
         return $this->render('security/login.html.twig', [
             'error' => $error,
             'username' => $username
@@ -79,6 +85,6 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'logout')]
     public function logout()
     {
-        
+       
     }
 }

@@ -92,9 +92,10 @@
 
         {# AFFICHAGE DES POSTS #}
 
-        <ul class="m-auto mb-5 mt-3 w-100 d-flex justify-content-center row flex-column">
+        <ul class="posts m-auto mb-5 mt-3 w-100 d-flex justify-content-center row flex-column">
             {% for post in posts %}
                 <div class="post mt-5 col-sm-6 mb-3 mb-sm-0 mx-auto" id="modal{{ post.id }}" data-id="modal{{ post.id }}">
+
                 
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
@@ -130,23 +131,7 @@
                         
                     
                 
-                    <!-- MODALE EDIT POST -->
-                    
-                    {# <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                           
-                                <div class="modal-header">
-                                    <a href="{{ path('user', { id: app.user.id }) }}" class="d-flex text-decoration-none">
-                                        <img src="{{ app.user.picture }}" class="post-avatar rounded-circle" alt="Photo de l'utilisateur">
-                                    </a>
-                                    <h1 class="modal-title ms-2 fs-5" id="exampleModalLabel">Modifier votre poste</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> #}
+                   
                 
 
                     <!-- MODALE DELETE POST -->
@@ -362,4 +347,11 @@
                 </div>
             </div>
         </div>
+        
+
+<script>
+    var dataPost = {{ data | raw  }}
+</script>
+
 {% endblock %}
+

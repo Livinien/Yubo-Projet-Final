@@ -21,6 +21,9 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class PostController extends AbstractController
 {
+
+    // PAGE D'ACCUEIL
+    
     #[Route('/', name: 'app_accueil')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function index(Request $request, EntityManagerInterface $em): Response
@@ -29,44 +32,62 @@ class PostController extends AbstractController
         $formCreatePost = $this->createPost($request, $em);
         // $commentForm = $this->addComment($post, $em);
 
-        // RÉCUPÉRER TOUTES LES INFORMATIONS D'UN POSTE DANS LA BASE DE DONNÉES ET TRIÉES DANS L'ORDRE DU PLUS RÉCENT AU PLUS ANCIEN EN FONCTION DE LA DATE DU POSTE.
-        $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC']);
-        // $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
+        // Poste du plus récent au plus ancien
+        $limit = 10;
+        $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC'], $limit);
 
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->addFlash('success', 'Vous êtes maintenant connecté.');
-            
-        } else {
-            $this->addFlash('success', 'Vous êtes maintenant déconnecté.');
+        $limit = $request->query->get('limit', 10);
+        $offset = $request->query->get('offset', 0);
+
+        // Utilisez $limit et $offset dans votre requête pour récupérer les posts
+        $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC'], $limit, $offset);
+
+        // Convertissez les $posts en un tableau associatif et renvoyez-les en tant que JSON
+        $responseData = [];
+        foreach ($posts as $post) {
+            $responseData[] = [
+                'id' => $post->getId(),
+                'author' => $post->getAuthor(),
+                'content' => $post->getContent(),
+                'imageName' => $post->getImageName(),
+                'rating' => $post->getRating(),
+                'nbrOfResponse' => $post->getNbrOfResponse(),
+            ];
         }
         
+        // $comments = $em->getRepository(Comment::class)->findBy([], ['createdAt' => 'DESC']);
+
         
-        
+        // Le rendu de la page d'accueil
         return $this->render('accueil/index.html.twig', [
             'formCreatePost' => $formCreatePost->createView(),
             // 'formEditPost' => $formEditPost->createView(),
             // 'commentForm' => $commentForm,
             'posts' => $posts,
             // 'comments' => $comments,
+            'data' => json_encode($responseData),
         ]);
     }
 
     
     
     
-    // CRÉATION D'UN POST
+    // CRÉATION D'UN POSTE
     
     #[Route('/app_accueil/create_post', name: 'create_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function createPost(Request $request, EntityManagerInterface $em): Form
     {
     
+        // 
         $user = $this->getUser();
         $post = new Post();
 
+        // Création du formulaire pour "Poste"
         $formCreatePost = $this->createForm(PostType::class, $post);
         $formCreatePost->handleRequest($request);
 
+        // Soumission du formulaire de la mise en ligne d'un poste en BDD
         if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
             
             // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
@@ -76,7 +97,7 @@ class PostController extends AbstractController
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
-                // Vérifier si une image avec le même nom existe déjà
+                // Vérifie si une image avec le même nom existe déjà
                 $newImagePath = $this->getParameter('images') . '/' . $newFilename;
 
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
@@ -88,19 +109,19 @@ class PostController extends AbstractController
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
-                    // Supprimer l'ancienne image associée au poste si elle existe
+                    // Supprime l'ancienne image associée au poste si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
                     
                 } catch (FileException $e) {
-                    // Gérer l'exception si le fichier ne peut pas être déplacé
+                    // Gère l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
                 }
             }
 
-            // $post->setNbrOfResponse(0);
-            // $post->setRating(0);
+            $post->setNbrOfResponse(0);
+            $post->setRating(0);
             $post->setAuthor($user);
             $post->setCreatedAt(new \DateTimeImmutable());
 
@@ -115,25 +136,21 @@ class PostController extends AbstractController
 
 
     
-    // MODIFIER UN POST
+    // MODIFIER UN POSTE
     
     #[Route('/app_accueil/edit_post/{id}', name: 'edit_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function editPost(Request $request, EntityManagerInterface $em, $id): Response
     {
-        
-        // Récupérer le poste à éditer en fonction de l'identifiant ($id)
+    
         /** @var Post $post */
         $post = $em->getRepository(Post::class)->find($id);
         
-
-        if (!$post) {
-            // Gérer le cas où le poste n'a pas été trouvé (par exemple, rediriger vers une page d'erreur)
-        }
-
+        // Création du formulaire pour "Poste"
         $formEditPost = $this->createForm(PostType::class, $post);
         $formEditPost->handleRequest($request);
 
+        // Soumission du formulaire de la modification d'un poste en BDD
         if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
             
             // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
@@ -155,13 +172,13 @@ class PostController extends AbstractController
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
-                    // Supprimer l'ancienne image associée au poste si elle existe
+                    // Supprime l'ancienne image associée au poste si elle existe
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
                     
                 } catch (FileException $e) {
-                    // Gérer l'exception si le fichier ne peut pas être déplacé
+                    // Gère l'exception si le fichier ne peut pas être déplacé
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image.');
                     
                 }
@@ -170,7 +187,6 @@ class PostController extends AbstractController
                 $post->setImageName(null);
             }
     
-            // Enregistrer les modifications dans la base de données
             $em->flush();
             $this->addFlash('success', 'Le poste a été modifié avec succès.');
             
@@ -185,7 +201,7 @@ class PostController extends AbstractController
 
     
     
-    // AJOUTER UN COMMENTAIRE À UN POST
+    // AJOUTER UN COMMENTAIRE À UN POSTE
     
     // #[Route('/app_accueil/comment/{id}', name: 'add_comment')]
     // #[isGranted('IS_AUTHENTICATED_FULLY')]
@@ -214,23 +230,24 @@ class PostController extends AbstractController
     
 
     
-    // SUPPRIMER UN POSTE D'UN UTILISATEUR
+    // SUPPRIMER UN POSTE
     
     #[Route('/app_accueil/delete/{id}', name: 'delete_post')]
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function delete($id, EntityManagerInterface $em): Response
     {
+        // 
         if ($id) {
 
             $postRepository = $em->getRepository(Post::class);
             $post = $postRepository->find($id);
 
-            // Supprimer le poste de la base de données.
             $em->remove($post);
             $em->flush();
 
             $this->addFlash('success', 'Le poste a été supprimé avec succès.');
             
+            // Si le poste n'existe pas
         } else {
             $this->addFlash('error', 'Le poste n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
         }

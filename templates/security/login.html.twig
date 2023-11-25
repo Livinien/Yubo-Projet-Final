@@ -4,18 +4,18 @@
 
 
 {% block body %}
-    <div class="inscription mb-20 w-50">
-        <h2 class="mb-20 mt-5 title-inscription text-purple-inscription d-flex justify-content-center mb-3">Connexion</h2>
+    <div class="connexion mb-20 w-50">
+        <h2 class="mb-20 mt-5 title-connexion text-purple-inscription d-flex justify-content-center mb-3">Connexion</h2>
 
-        <form action="{{ path('login') }}" method="POST">
+        <form action="{{ path('login') }}" method="POST" class="mt-4">
             <div class="form-row">
                 <label for="email">Email</label>
-                <input type="text" id="email" autofocus name="_username" value="{{ username }}">
+                <input type="text" id="email" autofocus name="_username" value="{{ username }}" required>
             </div>
             
             <div class="form-row">
                 <label for="password">Mot de Passe</label>
-                <input type="password" id="password" name="_password">
+                <input type="password" id="password" name="_password" required>
             </div>
 
             {# <div class="form-row">
@@ -29,7 +29,7 @@
 
             {% if error %}
                 <ul class="form-errors">
-                    <li>{{ error.messageKey | trans(error.messageData, 'security') }}</li>
+                    <li>Votre mot de passe est incorrect</li>
                 </ul>
             {% endif %}
             
