@@ -13,7 +13,12 @@ class CommentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
+        
+        // FORMULAIRE POUR METTRE EN LIGNE UN COMMENTAIRE
+        
+            // Input pour mettre en ligne du texte pour faire un message
             ->add('content', TextareaType::class, ['label' => false])
         ;
     }

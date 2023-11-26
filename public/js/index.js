@@ -121,7 +121,6 @@ if(loader) {
 
 const container = document.querySelector('.posts');
 
-
 window.addEventListener('scroll', () => { 
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 

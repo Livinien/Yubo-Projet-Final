@@ -16,25 +16,30 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
 
+  // PAGE PROFIL D'UN UTILISATEUR DE YUBO
+  
   #[Route('/user/{id}', name: 'user')]
   #[isGranted('IS_AUTHENTICATED_FULLY')]
   public function userProfile(User $user): Response
   {
 
+    // Récupère l'utilisateur connecté à son compte.
     $currentUser = $this->getUser();
 
+    // Être rediriger sur la page profil de l'utilisateur connecté grâce au name "current_user".
     if($currentUser === $user) {
-        return $this-> redirectToRoute('current_user');
+        return $this->redirectToRoute('current_user');
     }
     
+    // Afficher les détails d'un autre utilisateur de Yubo.
     return $this->render('user/show.html.twig', [
         'user' => $user
     ]);
   }
     
     
-    
-    // CHANGER SON MOT DE PASSE DEPUIS SA PAGE PROFIL
+    // SUR LA PAGE PROFIL DE L'UTILISATEUR CONNECTÉ
+    // CHANGER SON MOT DE PASSE
     
     #[Route('/user', name: 'current_user')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -55,6 +60,7 @@ class UserController extends AbstractController
         
       ]);
     
+      // Cela permet au formulaire de traiter les données soumises et de mettre à jour le mot de passe.
       $userForm->handleRequest($request);
       
       // Soumission du nouveau mot de passe en BDD
@@ -72,6 +78,7 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Modifications sauvegardées !');
       }
   
+      // Afficher le formulaire de la page profil
       return $this->render('user/index.html.twig', [
         'form' => $userForm->createView()
       ]);
@@ -86,11 +93,16 @@ class UserController extends AbstractController
     public function deleteProfile(Request $request, EntityManagerInterface $em, $id): Response
     {
       
+      // Récupérer l'entité "utilisateur" pour commencer à effectuer la suppresion de son compte d'un grâce à son entité "utilisateur".
       $userRepository = $em->getRepository(User::class);
+
+      // Récupérer l'id de l'utilisateur lié à son entité "utilisateur".
       $user = $userRepository->find($id);
       
+      // Cela déconnecte l'utilisateur actuellement connecté en réinitialisant le token d'authentification à null, ce qui permet sa suppresion totale.
       $this->container->get('security.token_storage')->setToken(null);
 
+      // Si l'utilisateur n'est pas trouvé, une exception s'affiche.
       if (!$user) {
         throw $this->createNotFoundException('Utilisateur non trouvé.');
       }

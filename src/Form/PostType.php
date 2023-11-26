@@ -15,6 +15,10 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
+            // FORMULAIRE POUR METTRE EN LIGNE UN POSTE
+            
+            // Input pour mettre en ligne du texte pour faire un message.
             ->add('content', TextareaType::class, ['label' => false], [
                 'attr' => ['class' => 'form-control',
                 'rows' => 6, 'cols' => 40,
@@ -23,7 +27,7 @@ class PostType extends AbstractType
                 ],
             ])
             
-            
+            // Input pour mettre en ligne une image avec le bundle VichUploader.
             ->add('imageFile', VichFileType::class, 
             [
                 'label' => false,
@@ -32,9 +36,9 @@ class PostType extends AbstractType
             ], 
             [
                 'attr' => ['class' => 'input-image'],
-                //'multiple' => true, // Permet d'uploader plusieurs fichiers
-                'required' => false, // Optionnel : permet de rendre le champ facultatif
-                'mapped' => false, // Assurez-vous de définir ceci si le champ n'est pas lié à une entité
+                //'multiple' => true, // Cela permet d'uploader plusieurs fichiers
+                'required' => false, // Cela permet de rendre le champ facultatif
+                'mapped' => false, 
             ])
         ;
     }
@@ -44,7 +48,6 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
             'data_class' => Post::class
         ]);
     }

@@ -36,13 +36,14 @@ class PostController extends AbstractController
         $limit = 10;
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC'], $limit);
 
+        // "limit" et "offset" détermine la quantité de résultats à récupérer dans une liste paginée
         $limit = $request->query->get('limit', 10);
         $offset = $request->query->get('offset', 0);
 
-        // Utilisez $limit et $offset dans votre requête pour récupérer les posts
+        // J'utilise $limit et $offset dans la requête pour récupérer tous les postes
         $posts = $em->getRepository(Post::class)->findBy([], ['createdAt' => 'DESC'], $limit, $offset);
 
-        // Convertissez les $posts en un tableau associatif et renvoyez-les en tant que JSON
+        // Je convertis les postes dans un tableau associatif et je les renvoie en format JSON
         $responseData = [];
         foreach ($posts as $post) {
             $responseData[] = [
@@ -59,6 +60,7 @@ class PostController extends AbstractController
 
         
         // Le rendu de la page d'accueil
+        // Affichage du formulaire de la création d'un poste
         return $this->render('accueil/index.html.twig', [
             'formCreatePost' => $formCreatePost->createView(),
             // 'formEditPost' => $formEditPost->createView(),
@@ -79,7 +81,7 @@ class PostController extends AbstractController
     public function createPost(Request $request, EntityManagerInterface $em): Form
     {
     
-        // 
+        // Création d'un nouveau poste associé à l'utilisateur connecté
         $user = $this->getUser();
         $post = new Post();
 
@@ -90,22 +92,27 @@ class PostController extends AbstractController
         // Soumission du formulaire de la mise en ligne d'un poste en BDD
         if ($formCreatePost->isSubmitted() && $formCreatePost->isValid()) {
             
+            
             // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
+            
+            // Cela récupère les données de la nouvelle image téléchargée via le formulaire lors de la création + récupération du nom de l'image associé à l'entité "poste" avant la création
             $imageFile = $formCreatePost['imageFile']->getData();
             $oldImage = $post->getImageFile();
             
+            // Vérification si une image a été télécharger + récupère le nom d'origine de l'image
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
                 // Vérifie si une image avec le même nom existe déjà
                 $newImagePath = $this->getParameter('images') . '/' . $newFilename;
 
+                // Si une nouvelle image a été téléchargée et si une image avec le même nom existe déjà sur le serveur alors tu m'affiches un message d'erreur 
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
-                    // Une image avec le même nom existe déjà, ne la remplacer pas
                     $this->addFlash('error', 'Une image avec le même nom existe déjà.');
                 }
 
                 try {
+                    // Cela déplace l'image téléchargé vers le répertoire "uploads"
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
@@ -143,7 +150,10 @@ class PostController extends AbstractController
     public function editPost(Request $request, EntityManagerInterface $em, $id): Response
     {
     
+        // Docblock PHP pour améliorer la documentation et l'analyse statique du code
         /** @var Post $post */
+
+        // Récupérer l'entité d'un poste à l'aide de son id
         $post = $em->getRepository(Post::class)->find($id);
         
         // Création du formulaire pour "Poste"
@@ -153,26 +163,33 @@ class PostController extends AbstractController
         // Soumission du formulaire de la modification d'un poste en BDD
         if ($formEditPost->isSubmitted() && $formEditPost->isValid()) {
             
+            
             // AJOUTER UNE IMAGE À UN POSTE (NON OBLIGATOIRE)
+            
+            // Cela récupère les données de la nouvelle image via le formulaire puis récupère le nom de l'image associé à l'entité "poste"
+
+            // Comparaison de l'ancienne image avec la nouvelle pour effectuer la modification
             $imageFile = $formEditPost['imageFile']->getData();
             $oldImage = $post->getImageFile();
             
+            // Vérification si une image a été télécharger + récupère le nom d'origine de l'image
             if ($imageFile) {
                 $newFilename = $imageFile->getClientOriginalName();
 
                 // Vérifie si une image avec le même nom existe déjà
                 $newImagePath = $this->getParameter('images') . '/' . $newFilename;
 
+                // Si une nouvelle image a été téléchargée et si une image avec le même nom existe déjà sur le serveur alors tu m'affiches un message d'erreur 
                 if ($oldImage !== $newFilename && file_exists($newImagePath)) {
-                    // Une image avec le même nom existe déjà, ne la remplace pas
                     $this->addFlash('error', 'Une image avec le même nom existe déjà.');
                 }
 
                 try {
+                    // Cela déplace l'image téléchargé vers le répertoire "uploads"
                     $imageFile->move($this->getParameter('images'), $newFilename);
                     $post->setImageName($newFilename);
 
-                    // Supprime l'ancienne image associée au poste si elle existe
+                    // Supprime l'ancienne image associée au poste si elle existe déjà dans le répertoire
                     if ($oldImage && file_exists($this->getParameter('images') . '/' . $oldImage)) {
                         unlink($this->getParameter('images') . '/' . $oldImage);
                     }
@@ -183,6 +200,8 @@ class PostController extends AbstractController
                     
                 }
                 
+                // Si l'utilisateur ne souhaite pas associé d'image avec l'entité "poste"
+                //S'il ne souhaite pas ajouter d'image dans le poste alors cela a une valeur "null"
             } else {
                 $post->setImageName(null);
             }
@@ -194,6 +213,7 @@ class PostController extends AbstractController
     
         }
 
+        // Affichage du formulaire de la modification d'un poste
         return $this->render('accueil/editPost.html.twig', [
             'formEditPost' => $formEditPost->createView(),
         ]);
@@ -236,10 +256,13 @@ class PostController extends AbstractController
     #[isGranted('IS_AUTHENTICATED_FULLY')]
     public function delete($id, EntityManagerInterface $em): Response
     {
-        // 
+
         if ($id) {
 
+            // Récupérer l'entité "poste" pour commencer à effectuer la suppresion d'un grâce à son entité "poste"
             $postRepository = $em->getRepository(Post::class);
+            
+            // Récupérer l'id d'un poste lié à son entité "poste" 
             $post = $postRepository->find($id);
 
             $em->remove($post);
@@ -247,7 +270,7 @@ class PostController extends AbstractController
 
             $this->addFlash('success', 'Le poste a été supprimé avec succès.');
             
-            // Si le poste n'existe pas
+            // Si le poste n'existe pas alors cela me renvoi un message d'erreur
         } else {
             $this->addFlash('error', 'Le poste n\'existe pas ou vous n\'avez pas la permission de le supprimer.');
         }

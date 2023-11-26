@@ -32,11 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     private ?string $newPassword = null;
 
-    #[Assert\NotBlank(message: 'Veuillez renseigner votre prénom.')]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Assert\NotBlank(message: 'Veuillez renseigner votre nom.')]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
@@ -46,8 +44,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[Assert\Url(message: 'Votre image doit provenir d\'une url.')]
-    #[Assert\NotBlank(message: 'Veuillez renseigner une image de profil.')]
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
